@@ -5,11 +5,11 @@
     { "src": "broadcast/**", "use": "@vercel/static" },
     { "src": "vote/**", "use": "@vercel/static" }
   ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/server.js" },
-    { "src": "/broadcast", "dest": "/broadcast/index.html" },
-    { "src": "/vote/([^/]+)", "dest": "/vote/index.html" },
-    { "src": "/vote", "dest": "/vote/index.html" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/server.js" },
+    { "source": "/broadcast", "destination": "/broadcast/index.html" },
+    { "source": "/vote/:slug*", "destination": "/vote/index.html" },
+    { "source": "/vote", "destination": "/vote/index.html" }
   ],
   "headers": [
     {

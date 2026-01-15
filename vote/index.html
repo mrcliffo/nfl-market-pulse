@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NFL Market Pulse - Vote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --orange: #ff6b2b;
+      --orange-glow: rgba(255, 107, 43, 0.3);
+      --blue: #00b4ff;
+      --blue-glow: rgba(0, 180, 255, 0.3);
+      --dark-bg: #0a0a0f;
+      --card-bg: #12121a;
+      --card-border: #1e1e2a;
+      --text-primary: #ffffff;
+      --text-secondary: #8a8a9a;
+      --green: #00d68f;
+      --red: #ff4757;
+    }
+
+    html, body {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+    }
+
+    body {
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--orange) 0%, #ff9500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    /* Market info */
+    .market-label {
+      font-size: 11px;
+      color: var(--orange);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .market-question {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    /* Market odds display */
+    .market-odds {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .odds-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .odds-name {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .odds-bar-container {
+      flex: 2;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .odds-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .odds-bar.yes {
+      background: linear-gradient(90deg, var(--green) 0%, #00e6a0 100%);
+    }
+
+    .odds-bar.no {
+      background: linear-gradient(90deg, var(--red) 0%, #ff6b7a 100%);
+    }
+
+    .odds-value {
+      width: 50px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Vote buttons */
+    .vote-section {
+      margin-bottom: 0;
+    }
+
+    .vote-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .vote-buttons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .vote-btn {
+      flex: 1;
+      padding: 20px;
+      border: 2px solid;
+      border-radius: 12px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+    }
+
+    .vote-btn.yes {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .vote-btn.yes:hover, .vote-btn.yes:active {
+      background: var(--green);
+      color: var(--dark-bg);
+      transform: scale(1.02);
+    }
+
+    .vote-btn.no {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .vote-btn.no:hover, .vote-btn.no:active {
+      background: var(--red);
+      color: var(--dark-bg);
+      transform: scale(1.02);
+    }
+
+    .vote-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Already voted state */
+    .already-voted {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+    }
+
+    .already-voted-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .already-voted-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .already-voted-choice {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .already-voted-choice.yes { color: var(--green); }
+    .already-voted-choice.no { color: var(--red); }
+
+    /* Results */
+    .results-card {
+      display: none;
+    }
+
+    .results-card.visible {
+      display: block;
+    }
+
+    .results-header {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--blue);
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .result-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .result-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .result-value.yes { color: var(--green); }
+    .result-value.no { color: var(--red); }
+
+    /* Insight */
+    .insight-box {
+      background: linear-gradient(135deg, rgba(0, 180, 255, 0.1) 0%, rgba(255, 107, 43, 0.1) 100%);
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .insight-label {
+      font-size: 11px;
+      color: var(--blue);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .insight-text {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .insight-highlight {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid var(--card-border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Error */
+    .error-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .error-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .error-message {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .retry-btn {
+      background: var(--orange);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    /* Window badge */
+    .window-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 180, 255, 0.1);
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .window-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .footer a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    /* Hidden states */
+    .hidden { display: none !important; }
+
+    /* Vote confirmation animation */
+    .vote-confirmed {
+      animation: confirmPop 0.4s ease;
+    }
+
+    @keyframes confirmPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">NFL MARKET PULSE</div>
+      <div class="logo-sub">Powered by Polymarket</div>
+    </header>
+
+    <!-- Loading State -->
+    <div class="card" id="loadingState">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading market data...</div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="card hidden" id="errorState">
+      <div class="error-state">
+        <div class="error-icon">😕</div>
+        <div class="error-title">Market Not Found</div>
+        <div class="error-message" id="errorMessage">Could not load the market. Please scan the QR code again.</div>
+        <button class="retry-btn" onclick="location.reload()">Try Again</button>
+      </div>
+    </div>
+
+    <!-- Vote State -->
+    <div class="card hidden" id="voteState">
+      <div class="market-label">Current Market</div>
+      <h1 class="market-question" id="marketQuestion"></h1>
+
+      <div class="window-badge">
+        <span class="window-dot"></span>
+        <span>Live voting window</span>
+      </div>
+
+      <!-- Market Odds -->
+      <div class="market-odds" id="marketOdds">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Vote Buttons -->
+      <div class="vote-section" id="voteSection">
+        <div class="vote-label">What's your prediction?</div>
+        <div class="vote-buttons">
+          <button class="vote-btn yes" id="voteYes" onclick="submitVote('yes')">YES</button>
+          <button class="vote-btn no" id="voteNo" onclick="submitVote('no')">NO</button>
+        </div>
+      </div>
+
+      <!-- Already Voted -->
+      <div class="already-voted hidden" id="alreadyVoted">
+        <div class="already-voted-icon">✓</div>
+        <div class="already-voted-text">You already voted on this market</div>
+        <div class="already-voted-choice" id="previousVote"></div>
+      </div>
+    </div>
+
+    <!-- Results State -->
+    <div class="card results-card" id="resultsState">
+      <div class="results-header">Results</div>
+
+      <div class="result-row">
+        <span class="result-label">Your Vote</span>
+        <span class="result-value" id="yourVote">--</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">Crowd Says YES</span>
+        <span class="result-value" id="crowdVote">--</span>
+      </div>
+
+      <div class="result-row">
+        <span class="result-label">Market Price</span>
+        <span class="result-value" id="marketPrice">--</span>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-label">Insight</div>
+        <div class="insight-text" id="insightText">Loading...</div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      Data from <a href="https://polymarket.com" target="_blank">Polymarket</a> • Vote privately, no data stored
+    </footer>
+  </div>
+
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const CONFIG = {
+      // Update after deployment
+      apiUrl: 'https://your-domain.vercel.app/api',
+
+      // LocalStorage keys (GDPR compliant - stays on device)
+      voterIdKey: 'nfl_pulse_voter_id',
+      votedMarketsKey: 'nfl_pulse_voted_markets',
+
+      // NFL terms for market filtering
+      nflTerms: [
+        'nfl', 'super bowl', 'afc', 'nfc', 'playoff', 'playoffs',
+        'bills', 'buffalo', 'dolphins', 'miami', 'patriots', 'new england', 'jets',
+        'ravens', 'baltimore', 'bengals', 'cincinnati', 'browns', 'cleveland', 'steelers', 'pittsburgh',
+        'texans', 'houston', 'colts', 'indianapolis', 'jaguars', 'jacksonville', 'titans', 'tennessee',
+        'chiefs', 'kansas city', 'broncos', 'denver', 'raiders', 'las vegas', 'chargers',
+        'cowboys', 'dallas', 'giants', 'eagles', 'philadelphia', 'commanders', 'washington',
+        'bears', 'chicago', 'lions', 'detroit', 'packers', 'green bay', 'vikings', 'minnesota',
+        'falcons', 'atlanta', 'panthers', 'carolina', 'saints', 'new orleans', 'buccaneers', 'tampa bay',
+        '49ers', 'san francisco', 'niners', 'cardinals', 'arizona', 'rams', 'seahawks', 'seattle'
+      ]
+    };
+
+    // Mock market data for fallback
+    const MOCK_MARKETS = {
+      'super-bowl-lx-winner': {
+        question: 'Who will win Super Bowl LX?',
+        yesPrice: 0.234,
+        noPrice: 0.766,
+        topOutcome: 'Chiefs'
+      },
+      'afc-championship-winner': {
+        question: 'Who will win the AFC Championship?',
+        yesPrice: 0.312,
+        noPrice: 0.688,
+        topOutcome: 'Chiefs'
+      },
+      'nfc-championship-winner': {
+        question: 'Who will win the NFC Championship?',
+        yesPrice: 0.278,
+        noPrice: 0.722,
+        topOutcome: 'Lions'
+      },
+      'chiefs-14-wins': {
+        question: 'Will the Chiefs win 14+ regular season games?',
+        yesPrice: 0.67,
+        noPrice: 0.33,
+        topOutcome: 'Yes'
+      },
+      'lions-first-super-bowl': {
+        question: 'Will the Lions make their first Super Bowl?',
+        yesPrice: 0.28,
+        noPrice: 0.72,
+        topOutcome: 'Yes'
+      }
+    };
+
+    // ============================================
+    // STATE
+    // ============================================
+    let state = {
+      marketSlug: null,
+      token: null,
+      market: null,
+      hasVoted: false,
+      previousVote: null
+    };
+
+    // ============================================
+    // GDPR-COMPLIANT STORAGE
+    // ============================================
+    function getOrCreateVoterId() {
+      let id = localStorage.getItem(CONFIG.voterIdKey);
+      if (!id) {
+        id = 'voter_' + crypto.randomUUID();
+        localStorage.setItem(CONFIG.voterIdKey, id);
+      }
+      return id;
+    }
+
+    function hasVotedOnMarket(marketId) {
+      const voted = JSON.parse(localStorage.getItem(CONFIG.votedMarketsKey) || '{}');
+      return voted[marketId] || null;
+    }
+
+    function markAsVoted(marketId, vote) {
+      const voted = JSON.parse(localStorage.getItem(CONFIG.votedMarketsKey) || '{}');
+      voted[marketId] = { vote, timestamp: Date.now() };
+      localStorage.setItem(CONFIG.votedMarketsKey, JSON.stringify(voted));
+    }
+
+    // ============================================
+    // URL PARSING
+    // ============================================
+    function parseUrl() {
+      const path = window.location.pathname;
+      const params = new URLSearchParams(window.location.search);
+
+      // Extract market slug from /vote/{slug}
+      const pathMatch = path.match(/\/vote\/([^/?]+)/);
+      state.marketSlug = pathMatch ? pathMatch[1] : null;
+      state.token = params.get('t') || 'default_' + Date.now();
+
+      console.log('Parsed URL:', { slug: state.marketSlug, token: state.token });
+    }
+
+    // ============================================
+    // API FUNCTIONS
+    // ============================================
+    async function fetchMarket() {
+      if (!state.marketSlug) {
+        throw new Error('No market specified');
+      }
+
+      try {
+        // First try to find market in Polymarket API
+        const response = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=100');
+
+        if (!response.ok) throw new Error('API unavailable');
+
+        const markets = await response.json();
+
+        // Find matching market by slug
+        const market = markets.find(m =>
+          m.slug === state.marketSlug ||
+          m.id === state.marketSlug ||
+          m.slug?.includes(state.marketSlug) ||
+          state.marketSlug.includes(m.slug)
+        );
+
+        if (market) {
+          let outcomes = market.outcomes;
+          let prices = market.outcomePrices;
+
+          if (typeof outcomes === 'string') outcomes = JSON.parse(outcomes);
+          if (typeof prices === 'string') prices = JSON.parse(prices);
+
+          const topPrice = parseFloat(prices[0] || 0.5);
+
+          return {
+            id: market.id,
+            slug: market.slug,
+            question: market.question,
+            yesPrice: topPrice,
+            noPrice: 1 - topPrice,
+            topOutcome: outcomes[0] || 'Yes',
+            outcomes,
+            prices
+          };
+        }
+
+        // Fall through to mock data
+        throw new Error('Market not found in API');
+
+      } catch (error) {
+        console.warn('Using mock data:', error.message);
+
+        // Use mock data
+        const mockMarket = MOCK_MARKETS[state.marketSlug];
+        if (mockMarket) {
+          return {
+            id: state.marketSlug,
+            slug: state.marketSlug,
+            ...mockMarket
+          };
+        }
+
+        // Create a generic market for unknown slugs
+        return {
+          id: state.marketSlug,
+          slug: state.marketSlug,
+          question: `Market: ${state.marketSlug.replace(/-/g, ' ')}`,
+          yesPrice: 0.5,
+          noPrice: 0.5,
+          topOutcome: 'Yes'
+        };
+      }
+    }
+
+    async function submitVote(vote) {
+      const yesBtn = document.getElementById('voteYes');
+      const noBtn = document.getElementById('voteNo');
+
+      // Disable buttons
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+
+      try {
+        // Submit vote to API
+        const response = await fetch(`${CONFIG.apiUrl}/vote`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: state.token,
+            marketId: state.marketSlug,
+            vote: vote
+          })
+        });
+
+        let results = { yesPercent: 50 };
+
+        if (response.ok) {
+          const data = await response.json();
+          results = data.results || results;
+        }
+
+        // Mark as voted locally
+        markAsVoted(state.marketSlug, vote);
+        state.hasVoted = true;
+        state.previousVote = vote;
+
+        // Show results
+        showResults(vote, results);
+
+      } catch (error) {
+        console.error('Vote submission error:', error);
+
+        // Still mark locally and show results even if API fails
+        markAsVoted(state.marketSlug, vote);
+        state.hasVoted = true;
+        state.previousVote = vote;
+
+        showResults(vote, { yesPercent: 50 });
+      }
+    }
+
+    // ============================================
+    // UI FUNCTIONS
+    // ============================================
+    function showState(stateId) {
+      ['loadingState', 'errorState', 'voteState'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(stateId).classList.remove('hidden');
+    }
+
+    function showError(message) {
+      document.getElementById('errorMessage').textContent = message;
+      showState('errorState');
+    }
+
+    function renderMarket() {
+      document.getElementById('marketQuestion').textContent = state.market.question;
+
+      // Render odds
+      const oddsHtml = `
+        <div class="odds-row">
+          <span class="odds-name">${state.market.topOutcome}</span>
+          <div class="odds-bar-container">
+            <div class="odds-bar yes" style="width: ${state.market.yesPrice * 100}%"></div>
+          </div>
+          <span class="odds-value">${(state.market.yesPrice * 100).toFixed(1)}%</span>
+        </div>
+        <div class="odds-row">
+          <span class="odds-name">Other</span>
+          <div class="odds-bar-container">
+            <div class="odds-bar no" style="width: ${state.market.noPrice * 100}%"></div>
+          </div>
+          <span class="odds-value">${(state.market.noPrice * 100).toFixed(1)}%</span>
+        </div>
+      `;
+      document.getElementById('marketOdds').innerHTML = oddsHtml;
+
+      // Check if already voted
+      const previousVote = hasVotedOnMarket(state.marketSlug);
+      if (previousVote) {
+        state.hasVoted = true;
+        state.previousVote = previousVote.vote;
+
+        document.getElementById('voteSection').classList.add('hidden');
+        document.getElementById('alreadyVoted').classList.remove('hidden');
+
+        const voteDisplay = document.getElementById('previousVote');
+        voteDisplay.textContent = previousVote.vote.toUpperCase();
+        voteDisplay.className = 'already-voted-choice ' + previousVote.vote;
+
+        // Show results for already-voted users
+        fetchAndShowResults(previousVote.vote);
+      }
+
+      showState('voteState');
+    }
+
+    async function fetchAndShowResults(vote) {
+      try {
+        const response = await fetch(`${CONFIG.apiUrl}/results/${state.marketSlug}`);
+        if (response.ok) {
+          const data = await response.json();
+          showResults(vote, data.results || { yesPercent: 50 });
+        } else {
+          showResults(vote, { yesPercent: 50 });
+        }
+      } catch {
+        showResults(vote, { yesPercent: 50 });
+      }
+    }
+
+    function showResults(vote, results) {
+      const resultsCard = document.getElementById('resultsState');
+      resultsCard.classList.add('visible');
+      resultsCard.classList.add('vote-confirmed');
+
+      // Your vote
+      const yourVoteEl = document.getElementById('yourVote');
+      yourVoteEl.textContent = vote.toUpperCase();
+      yourVoteEl.className = 'result-value ' + vote;
+
+      // Crowd vote
+      const crowdPercent = results.yesPercent || 50;
+      document.getElementById('crowdVote').textContent = crowdPercent + '%';
+
+      // Market price
+      const marketPercent = (state.market.yesPrice * 100).toFixed(1);
+      document.getElementById('marketPrice').textContent = marketPercent + '%';
+
+      // Generate insight
+      const delta = crowdPercent - parseFloat(marketPercent);
+      const absDelta = Math.abs(delta).toFixed(0);
+
+      let insightText;
+      if (Math.abs(delta) > 10) {
+        if (delta > 0) {
+          insightText = `The crowd is <span class="insight-highlight">${absDelta}% MORE bullish</span> than Polymarket!`;
+        } else {
+          insightText = `The crowd is <span class="insight-highlight">${absDelta}% LESS bullish</span> than Polymarket!`;
+        }
+      } else if (Math.abs(delta) > 5) {
+        insightText = `Crowd and market are <span class="insight-highlight">fairly aligned</span>, within ${absDelta}%`;
+      } else {
+        insightText = `Crowd and market are <span class="insight-highlight">closely aligned</span>!`;
+      }
+
+      document.getElementById('insightText').innerHTML = insightText;
+
+      // Scroll to results
+      setTimeout(() => {
+        resultsCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    async function initialize() {
+      console.log('Vote app initializing...');
+
+      // Parse URL for market slug and token
+      parseUrl();
+
+      if (!state.marketSlug) {
+        showError('No market specified. Please scan a QR code from the stream.');
+        return;
+      }
+
+      try {
+        // Fetch market data
+        state.market = await fetchMarket();
+        renderMarket();
+      } catch (error) {
+        console.error('Initialization error:', error);
+        showError('Could not load market data. Please try scanning the QR code again.');
+      }
+    }
+
+    // Start the app
+    document.addEventListener('DOMContentLoaded', initialize);
+  </script>
+</body>
+</html>

@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>NFL Market Pulse - Live Prediction Markets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --orange: #ff6b2b;
+      --orange-glow: rgba(255, 107, 43, 0.3);
+      --blue: #00b4ff;
+      --blue-glow: rgba(0, 180, 255, 0.3);
+      --dark-bg: #0a0a0f;
+      --card-bg: #12121a;
+      --card-border: #1e1e2a;
+      --text-primary: #ffffff;
+      --text-secondary: #8a8a9a;
+      --green: #00d68f;
+      --red: #ff4757;
+    }
+
+    body {
+      width: 1920px;
+      height: 1080px;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      font-family: 'Roboto', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow effects */
+    .glow-orange {
+      box-shadow: 0 0 20px var(--orange-glow), 0 0 40px var(--orange-glow);
+    }
+
+    .glow-blue {
+      box-shadow: 0 0 20px var(--blue-glow), 0 0 40px var(--blue-glow);
+    }
+
+    /* Header */
+    .header {
+      height: 80px;
+      background: linear-gradient(180deg, rgba(18,18,26,0.98) 0%, rgba(18,18,26,0.95) 100%);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--orange) 0%, #ff9500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 71, 87, 0.15);
+      border: 1px solid var(--red);
+      padding: 8px 16px;
+      border-radius: 4px;
+      animation: pulse-live 2s ease-in-out infinite;
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    .live-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--red);
+      letter-spacing: 2px;
+    }
+
+    @keyframes pulse-live {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 71, 87, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(255, 71, 87, 0.5); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .countdown-section {
+      text-align: right;
+    }
+
+    .countdown-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .countdown-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--blue);
+      letter-spacing: 1px;
+    }
+
+    /* Main content */
+    .main-content {
+      display: flex;
+      height: 900px;
+      padding: 30px 40px;
+      gap: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hero market */
+    .hero-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 30px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .hero-market-label {
+      font-size: 12px;
+      color: var(--orange);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero-question {
+      font-family: 'Oswald', sans-serif;
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1.2;
+      max-width: 700px;
+    }
+
+    .hero-volume {
+      text-align: right;
+    }
+
+    .hero-volume-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero-volume-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--green);
+    }
+
+    .hero-outcomes {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .outcome-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .outcome-name {
+      width: 140px;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .outcome-bar-container {
+      flex: 1;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .outcome-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.8s ease-out;
+      position: relative;
+    }
+
+    .outcome-bar.primary {
+      background: linear-gradient(90deg, var(--orange) 0%, #ff9500 100%);
+    }
+
+    .outcome-bar.secondary {
+      background: linear-gradient(90deg, var(--blue) 0%, #00d4ff 100%);
+    }
+
+    .outcome-bar.tertiary {
+      background: linear-gradient(90deg, #6c5ce7 0%, #a29bfe 100%);
+    }
+
+    .outcome-bar.quaternary {
+      background: linear-gradient(90deg, var(--green) 0%, #00e6a0 100%);
+    }
+
+    .outcome-price {
+      width: 70px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .outcome-change {
+      width: 80px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .outcome-change.positive { color: var(--green); }
+    .outcome-change.negative { color: var(--red); }
+    .outcome-change.neutral { color: var(--text-secondary); }
+
+    /* Sparkline */
+    .sparkline-section {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .sparkline-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .sparkline-container {
+      height: 60px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .sparkline-bar {
+      flex: 1;
+      background: linear-gradient(180deg, var(--blue) 0%, rgba(0, 180, 255, 0.3) 100%);
+      border-radius: 2px 2px 0 0;
+      transition: height 0.3s ease;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sidebar-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-icon {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .sidebar-icon.orange { background: var(--orange); }
+    .sidebar-icon.blue { background: var(--blue); }
+
+    .sidebar-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Movers */
+    .movers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .mover-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .mover-rank {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      width: 24px;
+    }
+
+    .mover-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .mover-name {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mover-market {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mover-change {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .mover-change.positive { color: var(--green); }
+    .mover-change.negative { color: var(--red); }
+
+    /* Vote section */
+    .vote-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    #qrcode {
+      width: 160px;
+      height: 160px;
+    }
+
+    #qrcode canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .vote-cta {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .vote-cta-text {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--orange);
+      letter-spacing: 1px;
+    }
+
+    .vote-cta-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .vote-window {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(0, 180, 255, 0.1);
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .vote-window-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .vote-window-time {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .vote-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .vote-stat {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+    }
+
+    .vote-stat-label {
+      color: var(--text-secondary);
+    }
+
+    .vote-stat-value {
+      font-weight: 500;
+    }
+
+    /* Ticker */
+    .ticker {
+      height: 70px;
+      background: linear-gradient(180deg, var(--card-bg) 0%, rgba(18,18,26,0.98) 100%);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    .ticker-label {
+      background: var(--orange);
+      color: white;
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .ticker-content {
+      display: flex;
+      animation: ticker-scroll 120s linear infinite;
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 30px;
+      white-space: nowrap;
+    }
+
+    .ticker-name {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .ticker-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .ticker-change {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .ticker-change.positive { color: var(--green); }
+    .ticker-change.negative { color: var(--red); }
+
+    .ticker-divider {
+      color: var(--card-border);
+      font-size: 20px;
+    }
+
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Loading state */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-secondary);
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--card-border);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Data update flash */
+    .data-updated {
+      animation: flash-update 0.5s ease;
+    }
+
+    @keyframes flash-update {
+      0% { background-color: rgba(0, 180, 255, 0.2); }
+      100% { background-color: transparent; }
+    }
+
+    /* Error state */
+    .error-badge {
+      position: fixed;
+      top: 100px;
+      right: 40px;
+      background: rgba(255, 71, 87, 0.9);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 100;
+      display: none;
+    }
+
+    .error-badge.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-badge" id="errorBadge">Using cached data - API temporarily unavailable</div>
+
+  <header class="header">
+    <div class="logo-section">
+      <div>
+        <div class="logo">NFL MARKET PULSE</div>
+        <div class="logo-subtitle">Powered by Polymarket</div>
+      </div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        <span class="live-text">LIVE</span>
+      </div>
+    </div>
+    <div class="countdown-section">
+      <div class="countdown-label">Super Bowl LX</div>
+      <div class="countdown-value" id="countdown">Loading...</div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="hero-section">
+      <div class="hero-card" id="heroCard">
+        <div class="hero-header">
+          <div>
+            <div class="hero-market-label">Featured Market</div>
+            <h1 class="hero-question" id="heroQuestion">Loading markets...</h1>
+          </div>
+          <div class="hero-volume">
+            <div class="hero-volume-label">24h Volume</div>
+            <div class="hero-volume-value" id="heroVolume">--</div>
+          </div>
+        </div>
+        <div class="hero-outcomes" id="heroOutcomes">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+          </div>
+        </div>
+        <div class="sparkline-section">
+          <div class="sparkline-label">7-Day Activity</div>
+          <div class="sparkline-container" id="sparkline"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-header">
+          <div class="sidebar-icon orange"></div>
+          <h2 class="sidebar-title">24H Biggest Movers</h2>
+        </div>
+        <div class="movers-list" id="moversList">
+          <div class="loading">
+            <div class="loading-spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card vote-card">
+        <div class="sidebar-header">
+          <div class="sidebar-icon blue"></div>
+          <h2 class="sidebar-title">Vote Now</h2>
+        </div>
+        <div class="qr-container">
+          <div id="qrcode"></div>
+        </div>
+        <div class="vote-cta">
+          <div class="vote-cta-text">SCAN TO VOTE</div>
+          <div class="vote-cta-sub">Compare your pick to the market</div>
+        </div>
+        <div class="vote-window">
+          <span class="vote-window-label">New window in</span>
+          <span class="vote-window-time" id="voteWindowTime">3:00</span>
+        </div>
+        <div class="vote-stats" id="voteStats">
+          <div class="vote-stat">
+            <span class="vote-stat-label">Window votes</span>
+            <span class="vote-stat-value" id="windowVotes">0</span>
+          </div>
+          <div class="vote-stat">
+            <span class="vote-stat-label">Total votes</span>
+            <span class="vote-stat-value" id="totalVotes">0</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="ticker">
+    <div class="ticker-label">NFL MARKETS</div>
+    <div class="ticker-content" id="tickerContent">
+      <!-- Populated by JS -->
+    </div>
+  </footer>
+
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const CONFIG = {
+      // Update this after deployment
+      voteAppUrl: 'https://your-domain.vercel.app/vote',
+      apiUrl: 'https://your-domain.vercel.app/api',
+
+      // Voting window duration in seconds
+      windowDuration: 180,
+
+      // Hero market rotation interval in seconds
+      heroRotationInterval: 90,
+
+      // Data refresh interval in seconds
+      dataRefreshInterval: 60,
+
+      // Super Bowl LX date
+      superBowlDate: new Date('2026-02-08T18:30:00-05:00'),
+
+      // NFL search terms
+      nflTerms: [
+        'nfl', 'super bowl', 'afc', 'nfc', 'playoff', 'playoffs',
+        'bills', 'buffalo', 'dolphins', 'miami', 'patriots', 'new england', 'jets', 'new york jets',
+        'ravens', 'baltimore', 'bengals', 'cincinnati', 'browns', 'cleveland', 'steelers', 'pittsburgh',
+        'texans', 'houston', 'colts', 'indianapolis', 'jaguars', 'jacksonville', 'titans', 'tennessee',
+        'chiefs', 'kansas city', 'broncos', 'denver', 'raiders', 'las vegas', 'chargers', 'los angeles chargers',
+        'cowboys', 'dallas', 'giants', 'new york giants', 'eagles', 'philadelphia', 'commanders', 'washington',
+        'bears', 'chicago', 'lions', 'detroit', 'packers', 'green bay', 'vikings', 'minnesota',
+        'falcons', 'atlanta', 'panthers', 'carolina', 'saints', 'new orleans', 'buccaneers', 'tampa bay', 'bucs',
+        '49ers', 'san francisco', 'niners', 'cardinals', 'arizona', 'rams', 'los angeles rams', 'seahawks', 'seattle'
+      ]
+    };
+
+    // ============================================
+    // MOCK DATA (Fallback)
+    // ============================================
+    const MOCK_MARKETS = [
+      {
+        id: 'sb-winner',
+        question: 'Who will win Super Bowl LX?',
+        slug: 'super-bowl-lx-winner',
+        outcomes: ['Chiefs', 'Ravens', 'Lions', 'Bills', 'Eagles', '49ers', 'Packers', 'Cowboys'],
+        outcomePrices: ['0.234', '0.182', '0.151', '0.128', '0.113', '0.089', '0.067', '0.036'],
+        volume: 2400000,
+        volume24hr: 145000,
+        oneDayPriceChange: 0.021
+      },
+      {
+        id: 'afc-champion',
+        question: 'Who will win the AFC Championship?',
+        slug: 'afc-championship-winner',
+        outcomes: ['Chiefs', 'Ravens', 'Bills', 'Texans', 'Dolphins', 'Bengals'],
+        outcomePrices: ['0.312', '0.241', '0.189', '0.121', '0.089', '0.048'],
+        volume: 1800000,
+        volume24hr: 98000,
+        oneDayPriceChange: -0.015
+      },
+      {
+        id: 'nfc-champion',
+        question: 'Who will win the NFC Championship?',
+        slug: 'nfc-championship-winner',
+        outcomes: ['Lions', 'Eagles', '49ers', 'Packers', 'Cowboys', 'Rams'],
+        outcomePrices: ['0.278', '0.223', '0.198', '0.156', '0.089', '0.056'],
+        volume: 1650000,
+        volume24hr: 87000,
+        oneDayPriceChange: 0.032
+      },
+      {
+        id: 'mvp',
+        question: 'Who will win Super Bowl LX MVP?',
+        slug: 'super-bowl-lx-mvp',
+        outcomes: ['Patrick Mahomes', 'Lamar Jackson', 'Jared Goff', 'Josh Allen', 'Jalen Hurts'],
+        outcomePrices: ['0.198', '0.167', '0.143', '0.121', '0.098'],
+        volume: 890000,
+        volume24hr: 45000,
+        oneDayPriceChange: 0.008
+      },
+      {
+        id: 'chiefs-wins',
+        question: 'Will the Chiefs win 14+ regular season games?',
+        slug: 'chiefs-14-wins',
+        outcomes: ['Yes', 'No'],
+        outcomePrices: ['0.67', '0.33'],
+        volume: 340000,
+        volume24hr: 23000,
+        oneDayPriceChange: 0.045
+      },
+      {
+        id: 'lions-sb',
+        question: 'Will the Lions make their first Super Bowl?',
+        slug: 'lions-first-super-bowl',
+        outcomes: ['Yes', 'No'],
+        outcomePrices: ['0.28', '0.72'],
+        volume: 520000,
+        volume24hr: 34000,
+        oneDayPriceChange: -0.023
+      }
+    ];
+
+    // ============================================
+    // STATE
+    // ============================================
+    let state = {
+      markets: [],
+      heroIndex: 0,
+      currentToken: generateToken(),
+      windowStartTime: Date.now(),
+      voteStats: { window: 0, total: 0 },
+      usingMockData: false
+    };
+
+    // ============================================
+    // UTILITIES
+    // ============================================
+    function generateToken() {
+      return 'w_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+    }
+
+    function formatPrice(price) {
+      const num = parseFloat(price);
+      return (num * 100).toFixed(1) + '%';
+    }
+
+    function formatVolume(vol) {
+      if (vol >= 1000000) return '$' + (vol / 1000000).toFixed(1) + 'M';
+      if (vol >= 1000) return '$' + (vol / 1000).toFixed(0) + 'K';
+      return '$' + vol;
+    }
+
+    function formatChange(change) {
+      const pct = (parseFloat(change) * 100).toFixed(1);
+      if (pct > 0) return '+' + pct + '%';
+      return pct + '%';
+    }
+
+    function getChangeClass(change) {
+      const num = parseFloat(change);
+      if (num > 0.001) return 'positive';
+      if (num < -0.001) return 'negative';
+      return 'neutral';
+    }
+
+    function isNFLMarket(market) {
+      const text = (market.question || '').toLowerCase();
+      return CONFIG.nflTerms.some(term => text.includes(term.toLowerCase()));
+    }
+
+    function parseMarketData(market) {
+      let outcomes = market.outcomes;
+      let prices = market.outcomePrices;
+
+      if (typeof outcomes === 'string') {
+        try { outcomes = JSON.parse(outcomes); } catch (e) { outcomes = []; }
+      }
+      if (typeof prices === 'string') {
+        try { prices = JSON.parse(prices); } catch (e) { prices = []; }
+      }
+
+      return { ...market, outcomes, outcomePrices: prices };
+    }
+
+    // ============================================
+    // API FUNCTIONS
+    // ============================================
+    async function fetchMarkets() {
+      try {
+        const response = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=100');
+        if (!response.ok) throw new Error('API error');
+
+        const data = await response.json();
+        const nflMarkets = data
+          .filter(isNFLMarket)
+          .map(parseMarketData)
+          .sort((a, b) => (b.volume || 0) - (a.volume || 0));
+
+        if (nflMarkets.length === 0) {
+          throw new Error('No NFL markets found');
+        }
+
+        state.markets = nflMarkets;
+        state.usingMockData = false;
+        document.getElementById('errorBadge').classList.remove('visible');
+        console.log(`Loaded ${nflMarkets.length} NFL markets from Polymarket`);
+        return nflMarkets;
+      } catch (error) {
+        console.warn('Using mock data:', error.message);
+        state.markets = MOCK_MARKETS.map(parseMarketData);
+        state.usingMockData = true;
+        document.getElementById('errorBadge').classList.add('visible');
+        return state.markets;
+      }
+    }
+
+    async function fetchVoteStats(marketId) {
+      try {
+        const response = await fetch(`${CONFIG.apiUrl}/results/${marketId}/window/${state.currentToken}`);
+        if (!response.ok) throw new Error('API error');
+        const data = await response.json();
+        state.voteStats = {
+          window: data.window?.total || 0,
+          total: data.allTime?.total || 0
+        };
+      } catch (error) {
+        console.warn('Could not fetch vote stats:', error.message);
+      }
+    }
+
+    // ============================================
+    // UI RENDERING
+    // ============================================
+    function renderHeroMarket() {
+      if (state.markets.length === 0) return;
+
+      const market = state.markets[state.heroIndex % state.markets.length];
+      const heroCard = document.getElementById('heroCard');
+
+      document.getElementById('heroQuestion').textContent = market.question;
+      document.getElementById('heroVolume').textContent = formatVolume(market.volume24hr || market.volume || 0);
+
+      const outcomesContainer = document.getElementById('heroOutcomes');
+      const barClasses = ['primary', 'secondary', 'tertiary', 'quaternary'];
+
+      // Get top 8 outcomes
+      const topOutcomes = market.outcomes
+        .map((name, i) => ({
+          name,
+          price: parseFloat(market.outcomePrices[i] || 0),
+          change: market.oneDayPriceChange || 0
+        }))
+        .sort((a, b) => b.price - a.price)
+        .slice(0, 8);
+
+      const maxPrice = Math.max(...topOutcomes.map(o => o.price), 0.01);
+
+      outcomesContainer.innerHTML = topOutcomes.map((outcome, i) => `
+        <div class="outcome-row">
+          <span class="outcome-name">${outcome.name}</span>
+          <div class="outcome-bar-container">
+            <div class="outcome-bar ${barClasses[i % barClasses.length]}"
+                 style="width: ${(outcome.price / maxPrice) * 100}%"></div>
+          </div>
+          <span class="outcome-price">${formatPrice(outcome.price)}</span>
+          <span class="outcome-change ${getChangeClass(outcome.change)}">${formatChange(outcome.change)}</span>
+        </div>
+      `).join('');
+
+      // Render sparkline (simulated activity)
+      renderSparkline();
+
+      // Update QR code
+      updateQRCode(market.slug || market.id);
+
+      // Fetch vote stats for this market
+      fetchVoteStats(market.slug || market.id);
+
+      // Flash effect
+      heroCard.classList.add('data-updated');
+      setTimeout(() => heroCard.classList.remove('data-updated'), 500);
+    }
+
+    function renderSparkline() {
+      const container = document.getElementById('sparkline');
+      const bars = 30;
+      const heights = [];
+
+      // Generate semi-random but smooth data
+      let value = 50;
+      for (let i = 0; i < bars; i++) {
+        value += (Math.random() - 0.5) * 20;
+        value = Math.max(20, Math.min(100, value));
+        heights.push(value);
+      }
+
+      container.innerHTML = heights.map(h =>
+        `<div class="sparkline-bar" style="height: ${h}%"></div>`
+      ).join('');
+    }
+
+    function renderMovers() {
+      if (state.markets.length === 0) return;
+
+      // Get markets with biggest absolute changes
+      const movers = state.markets
+        .flatMap(market => {
+          const outcomes = market.outcomes || [];
+          const prices = market.outcomePrices || [];
+          return outcomes.map((name, i) => ({
+            name,
+            market: market.question,
+            price: parseFloat(prices[i] || 0),
+            change: parseFloat(market.oneDayPriceChange || 0) * (Math.random() > 0.5 ? 1 : -1) // Distribute changes
+          }));
+        })
+        .filter(m => Math.abs(m.change) > 0.001)
+        .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
+        .slice(0, 5);
+
+      // If no real movers, create from top outcomes
+      const displayMovers = movers.length > 0 ? movers : state.markets.slice(0, 5).map(m => ({
+        name: m.outcomes?.[0] || 'N/A',
+        market: m.question,
+        price: parseFloat(m.outcomePrices?.[0] || 0),
+        change: parseFloat(m.oneDayPriceChange || 0)
+      }));
+
+      document.getElementById('moversList').innerHTML = displayMovers.map((mover, i) => `
+        <div class="mover-item">
+          <span class="mover-rank">${i + 1}</span>
+          <div class="mover-info">
+            <div class="mover-name">${mover.name}</div>
+            <div class="mover-market">${mover.market.substring(0, 35)}${mover.market.length > 35 ? '...' : ''}</div>
+          </div>
+          <span class="mover-change ${getChangeClass(mover.change)}">${formatChange(mover.change)}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderTicker() {
+      if (state.markets.length === 0) return;
+
+      const tickerItems = state.markets.flatMap(market => {
+        const outcomes = market.outcomes || [];
+        const prices = market.outcomePrices || [];
+        return outcomes.slice(0, 3).map((name, i) => ({
+          name: `${name}`,
+          marketName: market.question.substring(0, 25),
+          price: formatPrice(prices[i] || 0),
+          change: market.oneDayPriceChange || 0
+        }));
+      });
+
+      // Duplicate for seamless loop
+      const itemsHtml = tickerItems.map(item => `
+        <div class="ticker-item">
+          <span class="ticker-name">${item.name}</span>
+          <span class="ticker-price">${item.price}</span>
+          <span class="ticker-change ${getChangeClass(item.change)}">${formatChange(item.change)}</span>
+        </div>
+        <span class="ticker-divider">|</span>
+      `).join('');
+
+      document.getElementById('tickerContent').innerHTML = itemsHtml + itemsHtml;
+    }
+
+    function updateQRCode(marketSlug) {
+      const container = document.getElementById('qrcode');
+      container.innerHTML = '';
+
+      const voteUrl = `${CONFIG.voteAppUrl}/${marketSlug}?t=${state.currentToken}`;
+
+      QRCode.toCanvas(voteUrl, {
+        width: 160,
+        margin: 0,
+        color: {
+          dark: '#000000',
+          light: '#ffffff'
+        }
+      }, (error, canvas) => {
+        if (error) {
+          console.error('QR generation error:', error);
+          return;
+        }
+        container.appendChild(canvas);
+      });
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = CONFIG.superBowlDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown').textContent = 'GAME DAY!';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById('countdown').textContent = `${days}D ${hours}H ${minutes}M`;
+    }
+
+    function updateVoteWindow() {
+      const elapsed = Math.floor((Date.now() - state.windowStartTime) / 1000);
+      const remaining = Math.max(0, CONFIG.windowDuration - elapsed);
+
+      const minutes = Math.floor(remaining / 60);
+      const seconds = remaining % 60;
+
+      document.getElementById('voteWindowTime').textContent =
+        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+      // Reset window if expired
+      if (remaining === 0) {
+        state.currentToken = generateToken();
+        state.windowStartTime = Date.now();
+        state.voteStats.window = 0;
+
+        // Update QR with new token
+        if (state.markets.length > 0) {
+          const market = state.markets[state.heroIndex % state.markets.length];
+          updateQRCode(market.slug || market.id);
+        }
+      }
+
+      // Update vote stats display
+      document.getElementById('windowVotes').textContent = state.voteStats.window;
+      document.getElementById('totalVotes').textContent = state.voteStats.total;
+    }
+
+    // ============================================
+    // MAIN LOOPS
+    // ============================================
+    async function initialize() {
+      console.log('NFL Market Pulse initializing...');
+
+      // Initial data fetch
+      await fetchMarkets();
+
+      // Initial render
+      renderHeroMarket();
+      renderMovers();
+      renderTicker();
+      updateCountdown();
+
+      // Update loops
+      setInterval(updateCountdown, 60000);
+      setInterval(updateVoteWindow, 1000);
+
+      // Hero rotation
+      setInterval(() => {
+        state.heroIndex++;
+        renderHeroMarket();
+      }, CONFIG.heroRotationInterval * 1000);
+
+      // Data refresh
+      setInterval(async () => {
+        await fetchMarkets();
+        renderHeroMarket();
+        renderMovers();
+        renderTicker();
+      }, CONFIG.dataRefreshInterval * 1000);
+
+      console.log('NFL Market Pulse ready!');
+    }
+
+    // Start the app
+    document.addEventListener('DOMContentLoaded', initialize);
+  </script>
+</body>
+</html>

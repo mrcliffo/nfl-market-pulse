@@ -1,0 +1,17 @@
+{
+  "name": "nfl-market-pulse",
+  "version": "1.0.0",
+  "description": "NFL prediction market streaming dashboard with interactive voting",
+  "main": "api/server.js",
+  "scripts": {
+    "dev": "node api/server.js",
+    "start": "node api/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

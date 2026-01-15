@@ -638,8 +638,8 @@
       }
 
       try {
-        // First try to find market in Polymarket API
-        const response = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=100');
+        // Use our proxy to avoid CORS issues
+        const response = await fetch(`${CONFIG.apiUrl}/markets`);
 
         if (!response.ok) throw new Error('API unavailable');
 

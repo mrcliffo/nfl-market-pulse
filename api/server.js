@@ -177,6 +177,21 @@ app.get('/api/export', (req, res) => {
   });
 });
 
+// Proxy for Polymarket API (to avoid CORS issues)
+app.get('/api/markets', async (req, res) => {
+  try {
+    const response = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=100');
+    if (!response.ok) {
+      throw new Error(`Polymarket API error: ${response.status}`);
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Polymarket proxy error:', error.message);
+    res.status(502).json({ error: 'Failed to fetch from Polymarket', message: error.message });
+  }
+});
+
 // Handle OPTIONS for CORS preflight
 app.options('*', cors());
 

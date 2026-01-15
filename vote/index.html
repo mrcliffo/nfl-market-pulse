@@ -458,6 +458,13 @@
       </div>
     </div>
 
+    <!-- Market Selection State -->
+    <div class="card hidden" id="selectState">
+      <div class="market-label">Select a Market</div>
+      <h1 class="market-question" style="font-size: 20px; margin-bottom: 20px;">Choose an NFL market to vote on</h1>
+      <div id="marketList" style="display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto;"></div>
+    </div>
+
     <!-- Vote State -->
     <div class="card hidden" id="voteState">
       <div class="market-label">Current Market</div>
@@ -756,7 +763,7 @@
     // UI FUNCTIONS
     // ============================================
     function showState(stateId) {
-      ['loadingState', 'errorState', 'voteState'].forEach(id => {
+      ['loadingState', 'errorState', 'voteState', 'selectState'].forEach(id => {
         document.getElementById(id).classList.add('hidden');
       });
       document.getElementById(stateId).classList.remove('hidden');
@@ -869,6 +876,47 @@
     // ============================================
     // INITIALIZATION
     // ============================================
+    async function fetchMarketList() {
+      try {
+        const response = await fetch(`${CONFIG.apiUrl}/markets`);
+        if (!response.ok) throw new Error('API unavailable');
+        const markets = await response.json();
+
+        // Filter for NFL markets
+        const nflMarkets = markets.filter(m => {
+          const q = (m.question || '').toLowerCase();
+          return CONFIG.nflTerms.some(term => q.includes(term.toLowerCase()));
+        }).slice(0, 15); // Show top 15
+
+        return nflMarkets;
+      } catch (error) {
+        console.error('Failed to fetch markets:', error);
+        return [];
+      }
+    }
+
+    function renderMarketList(markets) {
+      const container = document.getElementById('marketList');
+
+      if (markets.length === 0) {
+        container.innerHTML = '<div style="color: var(--text-secondary); text-align: center;">No NFL markets available</div>';
+        return;
+      }
+
+      container.innerHTML = markets.map(m => {
+        const prices = typeof m.outcomePrices === 'string' ? JSON.parse(m.outcomePrices) : m.outcomePrices;
+        const price = (parseFloat(prices?.[0] || 0.5) * 100).toFixed(0);
+        return `
+          <a href="/vote/${m.slug}" style="display: flex; justify-content: space-between; align-items: center; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 8px; text-decoration: none; color: inherit; border: 1px solid var(--card-border);">
+            <span style="flex: 1; font-size: 14px;">${m.question}</span>
+            <span style="font-family: 'Oswald', sans-serif; font-size: 18px; color: var(--blue); margin-left: 12px;">${price}%</span>
+          </a>
+        `;
+      }).join('');
+
+      showState('selectState');
+    }
+
     async function initialize() {
       console.log('Vote app initializing...');
 
@@ -877,7 +925,9 @@
       console.log('Market slug:', state.marketSlug);
 
       if (!state.marketSlug) {
-        showError('No market specified. Please scan a QR code from the stream.');
+        // No slug - show market selection
+        const markets = await fetchMarketList();
+        renderMarketList(markets);
         return;
       }
 

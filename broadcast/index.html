@@ -161,8 +161,8 @@
     /* Main content */
     .main-content {
       display: flex;
-      height: 900px;
-      padding: 30px 40px;
+      height: 860px;
+      padding: 20px 40px;
       gap: 30px;
       position: relative;
       z-index: 1;
@@ -515,9 +515,10 @@
 
     /* Ticker */
     .ticker {
-      height: 70px;
+      height: 80px;
+      min-height: 80px;
       background: linear-gradient(180deg, var(--card-bg) 0%, rgba(18,18,26,0.98) 100%);
-      border-top: 1px solid var(--card-border);
+      border-top: 2px solid var(--orange);
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -1070,7 +1071,11 @@
     }
 
     function renderTicker() {
-      if (state.markets.length === 0) return;
+      console.log('renderTicker called, markets:', state.markets.length);
+      if (state.markets.length === 0) {
+        console.log('No markets for ticker');
+        return;
+      }
 
       // One entry per market with extracted name and Yes price
       const tickerItems = state.markets.map(market => {
@@ -1081,6 +1086,8 @@
           change: market.oneDayPriceChange || 0
         };
       });
+
+      console.log('Ticker items:', tickerItems.length);
 
       // Duplicate for seamless loop
       const itemsHtml = tickerItems.map(item => `
@@ -1093,6 +1100,7 @@
       `).join('');
 
       document.getElementById('tickerContent').innerHTML = itemsHtml + itemsHtml;
+      console.log('Ticker rendered');
     }
 
     function updateQRCode(marketSlug) {
@@ -1100,20 +1108,28 @@
       container.innerHTML = '';
 
       const voteUrl = `${CONFIG.voteAppUrl}/${marketSlug}?t=${state.currentToken}`;
+      console.log('Generating QR for:', voteUrl);
 
-      QRCode.toCanvas(voteUrl, {
+      // Use toDataURL for more reliable rendering
+      QRCode.toDataURL(voteUrl, {
         width: 160,
-        margin: 0,
+        margin: 1,
         color: {
           dark: '#000000',
           light: '#ffffff'
         }
-      }, (error, canvas) => {
+      }, (error, url) => {
         if (error) {
           console.error('QR generation error:', error);
+          container.innerHTML = '<div style="color: #666; font-size: 12px;">QR Error</div>';
           return;
         }
-        container.appendChild(canvas);
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.width = '160px';
+        img.style.height = '160px';
+        container.appendChild(img);
+        console.log('QR code generated');
       });
     }
 

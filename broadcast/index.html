@@ -1010,28 +1010,37 @@
       ).join('');
     }
 
+    function extractMarketName(question) {
+      // Extract team/player name from question for cleaner display
+      // "Will the Buffalo Bills win Super Bowl 2026?" -> "Buffalo Bills"
+      const match = question.match(/Will (?:the )?(.+?) (?:win|be|make)/i);
+      if (match) return match[1];
+      return question.substring(0, 30);
+    }
+
     function renderMovers() {
       if (state.markets.length === 0) return;
 
-      // Get markets with biggest absolute changes
+      // Get one entry per market, using actual price change (not both sides)
       const movers = state.markets
-        .flatMap(market => {
-          const outcomes = market.outcomes || [];
+        .map(market => {
+          const change = parseFloat(market.oneDayPriceChange || 0);
           const prices = market.outcomePrices || [];
-          return outcomes.map((name, i) => ({
-            name,
+          const yesPrice = parseFloat(prices[0] || 0);
+          return {
+            name: extractMarketName(market.question),
             market: market.question,
-            price: parseFloat(prices[i] || 0),
-            change: parseFloat(market.oneDayPriceChange || 0) * (Math.random() > 0.5 ? 1 : -1) // Distribute changes
-          }));
+            price: yesPrice,
+            change: change
+          };
         })
         .filter(m => Math.abs(m.change) > 0.001)
         .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
         .slice(0, 5);
 
-      // If no real movers, create from top outcomes
+      // If no real movers, show top markets by volume
       const displayMovers = movers.length > 0 ? movers : state.markets.slice(0, 5).map(m => ({
-        name: m.outcomes?.[0] || 'N/A',
+        name: extractMarketName(m.question),
         market: m.question,
         price: parseFloat(m.outcomePrices?.[0] || 0),
         change: parseFloat(m.oneDayPriceChange || 0)

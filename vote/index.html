@@ -639,11 +639,13 @@
 
       try {
         // Use our proxy to avoid CORS issues
+        console.log('Fetching from:', `${CONFIG.apiUrl}/markets`);
         const response = await fetch(`${CONFIG.apiUrl}/markets`);
 
-        if (!response.ok) throw new Error('API unavailable');
+        if (!response.ok) throw new Error('API unavailable: ' + response.status);
 
         const markets = await response.json();
+        console.log('Total markets fetched:', markets.length);
 
         // Find matching market by slug
         const market = markets.find(m =>
@@ -652,6 +654,7 @@
           m.slug?.includes(state.marketSlug) ||
           state.marketSlug.includes(m.slug)
         );
+        console.log('Market match found:', !!market);
 
         if (market) {
           let outcomes = market.outcomes;
@@ -871,6 +874,7 @@
 
       // Parse URL for market slug and token
       parseUrl();
+      console.log('Market slug:', state.marketSlug);
 
       if (!state.marketSlug) {
         showError('No market specified. Please scan a QR code from the stream.');
@@ -879,8 +883,11 @@
 
       try {
         // Fetch market data
+        console.log('Fetching market data...');
         state.market = await fetchMarket();
+        console.log('Market loaded:', state.market);
         renderMarket();
+        console.log('Market rendered');
       } catch (error) {
         console.error('Initialization error:', error);
         showError('Could not load market data. Please try scanning the QR code again.');

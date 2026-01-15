@@ -670,7 +670,7 @@
           </div>
         </div>
         <div class="sparkline-section">
-          <div class="sparkline-label">7-Day Activity</div>
+          <div class="sparkline-label">7-Day Price Trend</div>
           <div class="sparkline-container" id="sparkline"></div>
         </div>
       </div>
@@ -978,8 +978,8 @@
         </div>
       `).join('');
 
-      // Render sparkline (simulated activity)
-      renderSparkline();
+      // Render sparkline based on 7-day price trend
+      renderSparkline(market);
 
       // Update QR code
       updateQRCode(market.slug || market.id);
@@ -992,17 +992,28 @@
       setTimeout(() => heroCard.classList.remove('data-updated'), 500);
     }
 
-    function renderSparkline() {
+    function renderSparkline(market) {
       const container = document.getElementById('sparkline');
       const bars = 30;
       const heights = [];
 
-      // Generate semi-random but smooth data
-      let value = 50;
+      // Use oneWeekPriceChange to simulate a 7-day trend
+      const weekChange = parseFloat(market?.oneWeekPriceChange || 0);
+      const currentPrice = parseFloat(market?.outcomePrices?.[0] || 0.5);
+
+      // Calculate start price from current and change
+      const startPrice = currentPrice - weekChange;
+      const priceRange = Math.abs(weekChange) + 0.1; // Add padding
+
+      // Generate trend line with some noise
       for (let i = 0; i < bars; i++) {
-        value += (Math.random() - 0.5) * 20;
-        value = Math.max(20, Math.min(100, value));
-        heights.push(value);
+        const progress = i / (bars - 1);
+        const trendValue = startPrice + (weekChange * progress);
+        const noise = (Math.random() - 0.5) * 0.03;
+        const value = trendValue + noise;
+        // Normalize to 20-100% height
+        const normalized = ((value - startPrice + priceRange/2) / priceRange) * 80 + 20;
+        heights.push(Math.max(20, Math.min(100, normalized)));
       }
 
       container.innerHTML = heights.map(h =>
@@ -1061,15 +1072,14 @@
     function renderTicker() {
       if (state.markets.length === 0) return;
 
-      const tickerItems = state.markets.flatMap(market => {
-        const outcomes = market.outcomes || [];
+      // One entry per market with extracted name and Yes price
+      const tickerItems = state.markets.map(market => {
         const prices = market.outcomePrices || [];
-        return outcomes.slice(0, 3).map((name, i) => ({
-          name: `${name}`,
-          marketName: market.question.substring(0, 25),
-          price: formatPrice(prices[i] || 0),
+        return {
+          name: extractMarketName(market.question),
+          price: formatPrice(prices[0] || 0),
           change: market.oneDayPriceChange || 0
-        }));
+        };
       });
 
       // Duplicate for seamless loop

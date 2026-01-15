@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -37,6 +37,8 @@
       font-family: 'Roboto', sans-serif;
       overflow: hidden;
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Grid background */
@@ -67,6 +69,7 @@
     /* Header */
     .header {
       height: 80px;
+      flex-shrink: 0;
       background: linear-gradient(180deg, rgba(18,18,26,0.98) 0%, rgba(18,18,26,0.95) 100%);
       border-bottom: 1px solid var(--card-border);
       display: flex;
@@ -161,11 +164,12 @@
     /* Main content */
     .main-content {
       display: flex;
-      height: 860px;
-      padding: 20px 40px;
+      flex: 1;
+      padding: 15px 40px;
       gap: 30px;
       position: relative;
       z-index: 1;
+      overflow: hidden;
     }
 
     /* Hero market */
@@ -180,10 +184,260 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 30px;
-      flex: 1;
+      padding: 25px;
       display: flex;
       flex-direction: column;
+    }
+
+    /* Secondary markets grid */
+    .secondary-markets {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .secondary-market-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .secondary-market-question {
+      font-family: 'Oswald', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      line-height: 1.3;
+      height: 50px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    .secondary-market-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .secondary-market-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .secondary-market-change {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .secondary-market-volume {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .secondary-market-card.grouped {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .secondary-market-category {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--orange);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    .secondary-market-outcomes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .outcome-row-mini {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .outcome-row-mini:last-child {
+      border-bottom: none;
+    }
+
+    .outcome-name-mini {
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    .outcome-price-mini {
+      font-family: 'Oswald', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    /* Editorial Card */
+    .editorial-card {
+      background: linear-gradient(135deg, var(--card-bg) 0%, rgba(30, 30, 45, 1) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 30px 40px;
+      margin-top: 15px;
+      display: flex;
+      gap: 50px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      flex: 1;
+      min-height: 180px;
+    }
+
+    .editorial-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange) 0%, var(--blue) 100%);
+    }
+
+    .editorial-left {
+      flex: 1.3;
+      min-width: 0;
+    }
+
+    .editorial-right {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 50px;
+      border-left: 1px solid var(--card-border);
+    }
+
+    .editorial-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+
+    .editorial-label.mover { color: var(--orange); }
+    .editorial-label.debate { color: #a29bfe; }
+    .editorial-label.gap { color: var(--blue); }
+    .editorial-label.win { color: var(--green); }
+
+    .editorial-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 34px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .editorial-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .editorial-stat-primary {
+      font-family: 'Oswald', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .editorial-stat-primary.positive { color: var(--green); }
+    .editorial-stat-primary.negative { color: var(--red); }
+    .editorial-stat-primary.neutral { color: var(--blue); }
+
+    .editorial-stat-bar {
+      flex: 1;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      min-width: 250px;
+      max-width: 450px;
+    }
+
+    .editorial-bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.5s ease;
+      background: linear-gradient(90deg, var(--orange) 0%, var(--blue) 100%);
+    }
+
+    .editorial-bar-fill.green {
+      background: linear-gradient(90deg, var(--green) 0%, #00e6a0 100%);
+    }
+
+    .editorial-bar-fill.red {
+      background: linear-gradient(90deg, var(--red) 0%, #ff6b7a 100%);
+    }
+
+    /* Dynamic split bar - width controlled by CSS variable */
+    .editorial-stat-bar.split-bar {
+      position: relative;
+      background: var(--red);
+    }
+
+    .editorial-stat-bar.split-bar .editorial-bar-fill {
+      background: var(--green);
+    }
+
+    .editorial-stat-secondary {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .editorial-copy {
+      font-size: 22px;
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .editorial-meta {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    .editorial-card.fade-out {
+      animation: editorialFadeOut 0.3s ease forwards;
+    }
+
+    .editorial-card.fade-in {
+      animation: editorialFadeIn 0.3s ease forwards;
+    }
+
+    @keyframes editorialFadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+
+    @keyframes editorialFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .hero-header {
@@ -206,7 +460,7 @@
       font-size: 36px;
       font-weight: 600;
       line-height: 1.2;
-      max-width: 700px;
+      max-width: 950px;
     }
 
     .hero-volume {
@@ -302,8 +556,8 @@
 
     /* Sparkline */
     .sparkline-section {
-      margin-top: auto;
-      padding-top: 20px;
+      margin-top: 20px;
+      padding-top: 15px;
       border-top: 1px solid var(--card-border);
     }
 
@@ -334,21 +588,21 @@
       width: 420px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
     }
 
     .sidebar-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 20px;
     }
 
     .sidebar-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .sidebar-icon {
@@ -372,25 +626,45 @@
     .movers-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     .mover-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      padding: 12px;
+      padding: 14px;
       background: rgba(255, 255, 255, 0.02);
       border-radius: 8px;
-      transition: background 0.2s;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s, opacity 0.3s;
+    }
+
+    .mover-item.moving-up {
+      animation: moveUpGlow 0.6s ease;
+    }
+
+    .mover-item.moving-down {
+      animation: moveDownFade 0.6s ease;
+    }
+
+    @keyframes moveUpGlow {
+      0% { background: rgba(0, 212, 170, 0.1); }
+      100% { background: rgba(255, 255, 255, 0.02); }
+    }
+
+    @keyframes moveDownFade {
+      0% { background: rgba(255, 107, 107, 0.1); }
+      100% { background: rgba(255, 255, 255, 0.02); }
     }
 
     .mover-rank {
       font-family: 'Oswald', sans-serif;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
       color: var(--text-secondary);
       width: 24px;
+      flex-shrink: 0;
+      padding-top: 2px;
     }
 
     .mover-info {
@@ -398,26 +672,19 @@
       min-width: 0;
     }
 
-    .mover-name {
-      font-size: 14px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
     .mover-market {
-      font-size: 11px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 4px;
     }
 
     .mover-change {
       font-family: 'Oswald', sans-serif;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
+      flex-shrink: 0;
+      padding-top: 2px;
     }
 
     .mover-change.positive { color: var(--green); }
@@ -434,10 +701,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 15px;
       background: white;
       border-radius: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     #qrcode {
@@ -452,7 +719,7 @@
 
     .vote-cta {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .vote-cta-text {
@@ -517,8 +784,8 @@
     .ticker {
       height: 80px;
       min-height: 80px;
+      flex-shrink: 0;
       background: linear-gradient(180deg, var(--card-bg) 0%, rgba(18,18,26,0.98) 100%);
-      border-top: 2px solid var(--orange);
       display: flex;
       align-items: center;
       overflow: hidden;
@@ -536,40 +803,65 @@
       padding: 10px 20px;
       white-space: nowrap;
       z-index: 2;
+      position: relative;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-label::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(100vw - 100%);
+      height: 2px;
+      background: var(--orange);
     }
 
     .ticker-content {
       display: flex;
-      animation: ticker-scroll 120s linear infinite;
+      animation: ticker-scroll 60s linear infinite;
     }
 
     .ticker-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 0 30px;
+      gap: 16px;
+      padding: 0 40px;
       white-space: nowrap;
     }
 
     .ticker-name {
-      font-size: 15px;
+      font-size: 20px;
       font-weight: 500;
     }
 
     .ticker-price {
       font-family: 'Oswald', sans-serif;
-      font-size: 18px;
+      font-size: 24px;
       font-weight: 600;
       color: var(--blue);
     }
 
     .ticker-change {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 500;
     }
 
     .ticker-change.positive { color: var(--green); }
     .ticker-change.negative { color: var(--red); }
+
+    .ticker-event-title {
+      color: var(--orange);
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .ticker-outcomes {
+      font-size: 18px;
+      color: var(--text-primary);
+    }
 
     .ticker-divider {
       color: var(--card-border);
@@ -613,6 +905,100 @@
       100% { background-color: transparent; }
     }
 
+    /* Price change animations */
+    .price-up {
+      animation: flash-green 1.5s ease;
+    }
+
+    .price-down {
+      animation: flash-red 1.5s ease;
+    }
+
+    @keyframes flash-green {
+      0% { background-color: rgba(0, 214, 143, 0.4); }
+      100% { background-color: transparent; }
+    }
+
+    @keyframes flash-red {
+      0% { background-color: rgba(255, 71, 87, 0.4); }
+      100% { background-color: transparent; }
+    }
+
+    /* Value highlight */
+    .value-changed {
+      animation: highlight-pulse 2s ease;
+    }
+
+    @keyframes highlight-pulse {
+      0% { color: var(--orange); text-shadow: 0 0 10px var(--orange); }
+      50% { color: var(--orange); text-shadow: 0 0 20px var(--orange); }
+      100% { text-shadow: none; }
+    }
+
+    /* Card glow effect */
+    .card-glow-up {
+      animation: glow-green 2s ease;
+    }
+
+    .card-glow-down {
+      animation: glow-red 2s ease;
+    }
+
+    @keyframes glow-green {
+      0% { box-shadow: 0 0 20px rgba(0, 214, 143, 0.6), 0 0 40px rgba(0, 214, 143, 0.3); }
+      100% { box-shadow: none; }
+    }
+
+    @keyframes glow-red {
+      0% { box-shadow: 0 0 20px rgba(255, 71, 87, 0.6), 0 0 40px rgba(255, 71, 87, 0.3); }
+      100% { box-shadow: none; }
+    }
+
+    /* Animated arrows */
+    .change-arrow {
+      display: inline-block;
+      margin-left: 6px;
+      font-size: 14px;
+      animation: arrow-bounce 1s ease 3;
+    }
+
+    .change-arrow.up {
+      color: var(--green);
+    }
+
+    .change-arrow.down {
+      color: var(--red);
+    }
+
+    @keyframes arrow-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* Live update indicator */
+    .live-update-badge {
+      position: fixed;
+      top: 90px;
+      right: 40px;
+      background: linear-gradient(135deg, var(--green) 0%, #00e6a0 100%);
+      color: var(--dark-bg);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      z-index: 100;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: all 0.3s ease;
+    }
+
+    .live-update-badge.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
     /* Error state */
     .error-badge {
       position: fixed;
@@ -634,6 +1020,7 @@
 </head>
 <body>
   <div class="error-badge" id="errorBadge">Using cached data - API temporarily unavailable</div>
+  <div class="live-update-badge" id="liveUpdateBadge">PRICES UPDATED</div>
 
   <header class="header">
     <div class="logo-section">
@@ -675,6 +1062,30 @@
           <div class="sparkline-container" id="sparkline"></div>
         </div>
       </div>
+
+      <!-- Secondary Markets Grid -->
+      <div class="secondary-markets" id="secondaryMarkets">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Editorial Content Card -->
+      <div class="editorial-card" id="editorialCard">
+        <div class="editorial-left">
+          <div class="editorial-label" id="editorialLabel">BIG MOVER</div>
+          <div class="editorial-title" id="editorialTitle">Loading...</div>
+          <div class="editorial-stats" id="editorialStats">
+            <div class="editorial-stat-primary" id="editorialStatPrimary"></div>
+            <div class="editorial-stat-bar" id="editorialStatBar">
+              <div class="editorial-bar-fill" id="editorialBarFill"></div>
+            </div>
+            <div class="editorial-stat-secondary" id="editorialStatSecondary"></div>
+          </div>
+        </div>
+        <div class="editorial-right">
+          <div class="editorial-copy" id="editorialCopy">"The market is moving fast..."</div>
+          <div class="editorial-meta" id="editorialMeta"></div>
+        </div>
+      </div>
     </section>
 
     <aside class="sidebar">
@@ -702,15 +1113,7 @@
           <div class="vote-cta-text">SCAN TO VOTE</div>
           <div class="vote-cta-sub">Compare your pick to the market</div>
         </div>
-        <div class="vote-window">
-          <span class="vote-window-label">New window in</span>
-          <span class="vote-window-time" id="voteWindowTime">3:00</span>
-        </div>
         <div class="vote-stats" id="voteStats">
-          <div class="vote-stat">
-            <span class="vote-stat-label">Window votes</span>
-            <span class="vote-stat-value" id="windowVotes">0</span>
-          </div>
           <div class="vote-stat">
             <span class="vote-stat-label">Total votes</span>
             <span class="vote-stat-value" id="totalVotes">0</span>
@@ -740,7 +1143,7 @@
       windowDuration: 180,
 
       // Hero market rotation interval in seconds
-      heroRotationInterval: 90,
+      heroRotationInterval: 30,
 
       // Data refresh interval in seconds
       dataRefreshInterval: 60,
@@ -833,12 +1236,377 @@
     // ============================================
     let state = {
       markets: [],
+      groupedEvents: [], // Markets grouped by event ID
+      previousPrices: {}, // Track prices for change detection
       heroIndex: 0,
+      groupIndex: 0, // For cycling through grouped events
+      editorialIndex: 0, // For cycling through editorial themes
       currentToken: generateToken(),
       windowStartTime: Date.now(),
       voteStats: { window: 0, total: 0 },
+      crowdVotes: {}, // Store crowd vote percentages for sentiment gaps
       usingMockData: false
     };
+
+    // ============================================
+    // EDITORIAL CONTENT
+    // ============================================
+    const EDITORIAL_COPY = {
+      bigMovers: [
+        "The market is moving fast. When odds shift this hard, someone knows something.",
+        "This isn't noise - it's a signal. Smart money is repositioning.",
+        "A swing this big doesn't happen by accident. The narrative just changed.",
+        "Breaking: The market just repriced everything we thought we knew.",
+        "When the line moves like this, it's time to pay attention.",
+        "Odds don't lie. Something just shifted the calculus.",
+        "The smart money is making a statement. Are you listening?",
+        "This kind of movement usually means news is about to break.",
+        "A dramatic reprice. The collective wisdom just changed its mind.",
+        "Follow the money. It's telling a story right now.",
+        "Whiplash. The market just did a complete 180 on this one.",
+        "Big money just entered the chat. Odds are moving fast.",
+        "Someone's betting like they know the ending. Watch this space.",
+        "The market doesn't panic for nothing. What changed?",
+        "Sharp bettors are loading up. This move has conviction written all over it.",
+        "When lines move this fast, insiders are usually involved.",
+        "A seismic shift. Yesterday's longshot is today's contender.",
+        "The algorithm detected smoke. Where there's smoke, there's fire.",
+        "Momentum is everything. This market just found some.",
+        "Price discovery in real time. The truth is being repriced."
+      ],
+      debateFuel: [
+        "The market can't decide. Neither can Vegas. Pick your side.",
+        "A true coin flip. This is where debates get heated.",
+        "Split right down the middle. Perfect for a hot take.",
+        "50/50 odds means maximum uncertainty. Time to pick a lane.",
+        "The wisdom of crowds is deadlocked. What do YOU think?",
+        "No consensus. No clear favorite. Just pure debate material.",
+        "When the market is this divided, everyone has an opinion.",
+        "Too close to call. This one's going to split the room.",
+        "Neither side is backing down. The ultimate pick-a-side question.",
+        "Dead heat. This is what sports arguments are made of.",
+        "The ultimate sports bar debate. No clear winner in sight.",
+        "Both sides think they're right. Only one will be.",
+        "Maximum chaos. The prediction market is throwing up its hands.",
+        "This is the kind of pick that ruins friendships. Choose wisely.",
+        "Flip a coin? The market basically already did.",
+        "Perfectly balanced. As all sports debates should be.",
+        "The analytics say maybe. The gut says maybe. Good luck.",
+        "Two fan bases. One trophy. Zero consensus.",
+        "When the market shrugs, it's time for hot takes.",
+        "The only certainty here is uncertainty. Make your case."
+      ],
+      sentimentGaps: [
+        "Fan optimism is way higher than the smart money. Who's right?",
+        "The market says one thing. The fans say another. Someone's wrong.",
+        "A massive gap between Wall Street and Main Street. Classic.",
+        "Are fans delusional, or do they see something the market doesn't?",
+        "The wisdom of crowds vs. the weight of money. Fight!",
+        "When fans and bettors disagree this much, that's a story.",
+        "Heart says yes. Money says no. The eternal sports debate.",
+        "This gap is content gold. Why does smart money disagree with fans?",
+        "Passion vs. probability. The fans aren't buying what the market's selling.",
+        "The market thinks fans are dreaming. Are they?",
+        "The spreadsheet says no. The heart says yes. Tale as old as time.",
+        "Fans see a champion. The market sees a mirage. Who blinks first?",
+        "Hope vs. the house. The eternal underdog story.",
+        "The analytics nerds and the superfans are at war. Pick a side.",
+        "Sometimes the crowd knows. Sometimes the crowd hopes. Which is this?",
+        "The market is cold. The fans are not. Temperature check: scorching.",
+        "Belief is priceless. Unless you're betting on it.",
+        "The fans have faith. The market has data. Classic showdown.",
+        "Emotional investing meets rational markets. This won't end well for someone.",
+        "The beautiful game of fans vs. forecasts. Never gets old."
+      ],
+      bigWins: [
+        "If you staked $100 on Polymarket, you'd be counting ${payout} right now.",
+        "Early believers just cashed out big. $100 became ${payout}.",
+        "The market doubted it. The believers didn't. Payday: ${payout} on $100.",
+        "That's a ${returnPct}% return. Not bad for trusting your gut.",
+        "Conviction paid off. $100 in, ${payout} out. Who called it?",
+        "The smart money was wrong. The brave money just won big.",
+        "From underdog odds to winner's circle. $100 → ${payout}.",
+        "This is what betting on yourself looks like. ${profit} profit on $100.",
+        "The doubters are quiet. The winners are cashing ${payout} per $100 staked.",
+        "Against the odds, into the money. $100 became ${payout}."
+      ]
+    };
+
+    function getRandomCopy(theme) {
+      const copies = EDITORIAL_COPY[theme];
+      return copies[Math.floor(Math.random() * copies.length)];
+    }
+
+    function findBigMover() {
+      // Find markets with significant daily price changes (rotate through them)
+      const qualifyingMarkets = state.markets.filter(market => {
+        const change = Math.abs(parseFloat(market.oneDayPriceChange || 0));
+        return change > 0.02; // At least 2% change
+      }).sort((a, b) => {
+        return Math.abs(parseFloat(b.oneDayPriceChange || 0)) - Math.abs(parseFloat(a.oneDayPriceChange || 0));
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Rotate through top 10 movers
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 10);
+      return qualifyingMarkets[idx];
+    }
+
+    function findDebateFuel() {
+      // Find markets close to 50/50 (rotate through them)
+      const qualifyingMarkets = state.markets.filter(market => {
+        const prices = market.outcomePrices || [];
+        const yesPrice = parseFloat(prices[0] || 0);
+        const distanceFrom50 = Math.abs(yesPrice - 0.5);
+        return distanceFrom50 < 0.15; // Within 15% of 50/50
+      }).sort((a, b) => {
+        // Sort by volume descending (show higher volume markets more)
+        return parseFloat(b.volume || 0) - parseFloat(a.volume || 0);
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Rotate through top debate markets
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 8);
+      return qualifyingMarkets[idx];
+    }
+
+    function findSentimentGap() {
+      // Find markets with gap between market price and crowd vote (rotate through them)
+      const qualifyingMarkets = [];
+
+      state.markets.forEach(market => {
+        const prices = market.outcomePrices || [];
+        const marketPrice = parseFloat(prices[0] || 0);
+        // Look up crowd vote by market slug
+        const crowdVote = state.crowdVotes[market.slug] || null;
+
+        if (crowdVote !== null) {
+          const gap = Math.abs(marketPrice - crowdVote);
+          if (gap > 0.05) { // At least 5% gap
+            qualifyingMarkets.push({ ...market, crowdVote, gap });
+          }
+        }
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Sort by gap size descending
+      qualifyingMarkets.sort((a, b) => b.gap - a.gap);
+
+      // Rotate through markets with sentiment gaps
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 8);
+      return qualifyingMarkets[idx];
+    }
+
+    function findBigWin() {
+      // Find recently resolved markets with big payouts
+      // For now, simulate (would need to track resolved markets)
+      const resolvedExamples = [
+        { question: "Saquon Barkley - NFL Rushing Yards Leader", entryPrice: 0.38, result: "WON" },
+        { question: "Lions to make NFC Championship", entryPrice: 0.42, result: "WON" },
+        { question: "Josh Allen - NFL MVP", entryPrice: 0.28, result: "WON" },
+        { question: "Lamar Jackson - 4000+ Passing Yards", entryPrice: 0.35, result: "WON" },
+        { question: "Bills to win AFC East", entryPrice: 0.45, result: "WON" }
+      ];
+
+      const example = resolvedExamples[Math.floor(Math.random() * resolvedExamples.length)];
+      const payout = (1 / example.entryPrice).toFixed(2);
+      const profit = ((1 / example.entryPrice) - 1) * 100;
+      const returnPct = (((1 / example.entryPrice) - 1) * 100).toFixed(0);
+
+      return {
+        question: example.question,
+        entryPrice: example.entryPrice,
+        payout: (parseFloat(payout) * 100).toFixed(0),
+        profit: profit.toFixed(0),
+        returnPct
+      };
+    }
+
+    function renderEditorial() {
+      const card = document.getElementById('editorialCard');
+      // Big Wins removed - requires resolved market tracking we don't have
+      // Sentiment Gaps only shown if we have real crowd vote data
+      const themes = ['bigMovers', 'debateFuel', 'sentimentGaps'];
+
+      // Try themes starting from current index, skip if no data
+      let theme = null;
+      let attempts = 0;
+      while (!theme && attempts < themes.length) {
+        const tryTheme = themes[(state.editorialIndex + attempts) % themes.length];
+        // Check if this theme has data before selecting it
+        if (tryTheme === 'sentimentGaps' && !findSentimentGap()) {
+          attempts++;
+          continue;
+        }
+        theme = tryTheme;
+      }
+
+      // If no theme has data, default to bigMovers
+      if (!theme) theme = 'bigMovers';
+
+      // Fade out
+      card.classList.add('fade-out');
+
+      setTimeout(() => {
+        let content = null;
+
+        // Helper to get full market title with event context
+        function getFullMarketTitle(market) {
+          const eventTitle = market.events?.[0]?.title || '';
+          const outcomeName = market.groupItemTitle || '';
+
+          // If we have both event and outcome, combine them
+          if (eventTitle && outcomeName && !market.question.includes(eventTitle)) {
+            return `${eventTitle}: ${outcomeName}`;
+          }
+          // Otherwise use the full question
+          return market.question;
+        }
+
+        switch (theme) {
+          case 'bigMovers':
+            const mover = findBigMover();
+            if (mover) {
+              const change = parseFloat(mover.oneDayPriceChange || 0);
+              const prices = mover.outcomePrices || [];
+              const currentPrice = parseFloat(prices[0] || 0);
+              const previousPrice = currentPrice - change;
+
+              content = {
+                label: 'BIG MOVER',
+                labelClass: 'mover',
+                title: getFullMarketTitle(mover),
+                statPrimary: `${(previousPrice * 100).toFixed(1)}% → ${(currentPrice * 100).toFixed(1)}%`,
+                statPrimaryClass: change > 0 ? 'positive' : 'negative',
+                barWidthStart: Math.max(0, previousPrice * 100),
+                barWidth: currentPrice * 100,
+                barClass: change > 0 ? 'green' : 'red',
+                barContainerClass: '',
+                animateBar: true,
+                statSecondary: `(${change > 0 ? '+' : ''}${(change * 100).toFixed(1)}% today)`,
+                copy: getRandomCopy('bigMovers'),
+                meta: `${formatVolume(mover.volume || 0)} staked on this market`
+              };
+            }
+            break;
+
+          case 'debateFuel':
+            const debate = findDebateFuel();
+            if (debate) {
+              const prices = debate.outcomePrices || [];
+              const yesPrice = parseFloat(prices[0] || 0);
+
+              content = {
+                label: 'DEBATE FUEL',
+                labelClass: 'debate',
+                title: getFullMarketTitle(debate),
+                statPrimary: `YES ${(yesPrice * 100).toFixed(0)}%`,
+                statPrimaryClass: 'positive',
+                barWidth: yesPrice * 100,
+                barClass: '',
+                barContainerClass: 'split-bar',
+                statSecondary: `NO ${((1 - yesPrice) * 100).toFixed(0)}%`,
+                copy: getRandomCopy('debateFuel'),
+                meta: `${formatVolume(debate.volume || 0)} staked on this market`
+              };
+            }
+            break;
+
+          case 'sentimentGaps':
+            const gap = findSentimentGap();
+            if (gap) {
+              const prices = gap.outcomePrices || [];
+              const marketPrice = parseFloat(prices[0] || 0);
+              const crowdPrice = gap.crowdVote;
+              const gapPct = ((crowdPrice - marketPrice) * 100).toFixed(0);
+              const fansHigher = crowdPrice > marketPrice;
+
+              content = {
+                label: 'SENTIMENT GAP',
+                labelClass: 'gap',
+                title: getFullMarketTitle(gap),
+                statPrimary: `Market: ${(marketPrice * 100).toFixed(0)}%`,
+                statPrimaryClass: 'neutral',
+                barWidth: crowdPrice * 100,
+                barClass: fansHigher ? 'green' : 'red',
+                barContainerClass: '',
+                statSecondary: `Fans: ${(crowdPrice * 100).toFixed(0)}% (${gapPct > 0 ? '+' : ''}${gapPct}% gap)`,
+                copy: getRandomCopy('sentimentGaps'),
+                meta: `${formatVolume(gap.volume || 0)} staked on this market`
+              };
+            }
+            break;
+
+          case 'bigWins':
+            const win = findBigWin();
+            if (win) {
+              let copy = getRandomCopy('bigWins')
+                .replace('${payout}', '$' + win.payout)
+                .replace('${profit}', '$' + win.profit)
+                .replace('${returnPct}', win.returnPct);
+
+              content = {
+                label: 'BIG WIN',
+                labelClass: 'win',
+                title: win.question,
+                statPrimary: `Entry: ${(win.entryPrice * 100).toFixed(0)}%`,
+                statPrimaryClass: 'positive',
+                barWidth: 100,
+                barClass: 'green',
+                barContainerClass: '',
+                statSecondary: `Payout: ${(1/win.entryPrice).toFixed(2)}x`,
+                copy: copy,
+                meta: `$100 → $${win.payout}`
+              };
+            }
+            break;
+        }
+
+        // Apply content or use fallback
+        if (content) {
+          document.getElementById('editorialLabel').textContent = content.label;
+          document.getElementById('editorialLabel').className = 'editorial-label ' + content.labelClass;
+          document.getElementById('editorialTitle').textContent = content.title;
+          document.getElementById('editorialStatPrimary').textContent = content.statPrimary;
+          document.getElementById('editorialStatPrimary').className = 'editorial-stat-primary ' + content.statPrimaryClass;
+          document.getElementById('editorialStatBar').className = 'editorial-stat-bar ' + (content.barContainerClass || '');
+
+          const barFill = document.getElementById('editorialBarFill');
+          barFill.className = 'editorial-bar-fill ' + content.barClass;
+
+          // Animate bar for Big Movers (start at old value, animate to new)
+          if (content.animateBar && content.barWidthStart !== undefined) {
+            barFill.style.transition = 'none';
+            barFill.style.width = content.barWidthStart + '%';
+            // Force reflow to ensure the initial state is rendered
+            barFill.offsetHeight;
+            // Now animate to the new value
+            setTimeout(() => {
+              barFill.style.transition = 'width 1.5s ease-out';
+              barFill.style.width = content.barWidth + '%';
+            }, 100);
+          } else {
+            barFill.style.transition = 'width 0.5s ease';
+            barFill.style.width = content.barWidth + '%';
+          }
+
+          document.getElementById('editorialStatSecondary').textContent = content.statSecondary;
+          document.getElementById('editorialCopy').textContent = '"' + content.copy + '"';
+          document.getElementById('editorialMeta').textContent = content.meta;
+        }
+
+        // Fade in
+        card.classList.remove('fade-out');
+        card.classList.add('fade-in');
+
+        setTimeout(() => {
+          card.classList.remove('fade-in');
+        }, 300);
+      }, 300);
+    }
 
     // ============================================
     // UTILITIES
@@ -853,9 +1621,10 @@
     }
 
     function formatVolume(vol) {
-      if (vol >= 1000000) return '$' + (vol / 1000000).toFixed(1) + 'M';
-      if (vol >= 1000) return '$' + (vol / 1000).toFixed(0) + 'K';
-      return '$' + vol;
+      const num = parseFloat(vol) || 0;
+      if (num >= 1000000) return '$' + (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return '$' + (num / 1000).toFixed(0) + 'K';
+      return '$' + num.toFixed(0);
     }
 
     function formatChange(change) {
@@ -869,6 +1638,34 @@
       if (num > 0.001) return 'positive';
       if (num < -0.001) return 'negative';
       return 'neutral';
+    }
+
+    // Price change tracking
+    function getPriceChange(marketId, currentPrice) {
+      const previous = state.previousPrices[marketId];
+      if (previous === undefined) return 0;
+      return currentPrice - previous;
+    }
+
+    function storePrices(markets) {
+      markets.forEach(market => {
+        const prices = market.outcomePrices || [];
+        const price = parseFloat(prices[0] || 0);
+        state.previousPrices[market.id || market.slug] = price;
+      });
+    }
+
+    function showUpdateBadge(message = 'PRICES UPDATED') {
+      const badge = document.getElementById('liveUpdateBadge');
+      badge.textContent = message;
+      badge.classList.add('visible');
+      setTimeout(() => badge.classList.remove('visible'), 2500);
+    }
+
+    function getChangeArrow(change, threshold = 0.005) {
+      if (change > threshold) return '<span class="change-arrow up">▲</span>';
+      if (change < -threshold) return '<span class="change-arrow down">▼</span>';
+      return '';
     }
 
     function isNFLMarket(market) {
@@ -900,8 +1697,8 @@
         if (!response.ok) throw new Error('API error');
 
         const data = await response.json();
+        // API already filters for NFL markets, just parse and sort by volume
         const nflMarkets = data
-          .filter(isNFLMarket)
           .map(parseMarketData)
           .sort((a, b) => (b.volume || 0) - (a.volume || 0));
 
@@ -909,14 +1706,41 @@
           throw new Error('No NFL markets found');
         }
 
+        // Check for price changes before updating state
+        let hasChanges = false;
+        let biggestChange = 0;
+        nflMarkets.forEach(market => {
+          const prices = market.outcomePrices || [];
+          const currentPrice = parseFloat(prices[0] || 0);
+          const change = getPriceChange(market.id || market.slug, currentPrice);
+          if (Math.abs(change) > 0.005) { // 0.5% threshold
+            hasChanges = true;
+            if (Math.abs(change) > Math.abs(biggestChange)) {
+              biggestChange = change;
+            }
+          }
+        });
+
+        // Store current prices for next comparison
+        const hadPreviousPrices = Object.keys(state.previousPrices).length > 0;
+        storePrices(nflMarkets);
+
+        // Show update badge if prices changed (but not on first load)
+        if (hasChanges && hadPreviousPrices) {
+          const direction = biggestChange > 0 ? '▲' : '▼';
+          showUpdateBadge(`PRICES UPDATED ${direction}`);
+        }
+
         state.markets = nflMarkets;
+        state.groupedEvents = groupMarketsByEvent(nflMarkets);
         state.usingMockData = false;
         document.getElementById('errorBadge').classList.remove('visible');
         console.log(`Loaded ${nflMarkets.length} NFL markets from Polymarket`);
+        console.log(`Found ${state.groupedEvents.length} grouped events:`, state.groupedEvents.map(g => g.title));
         if (nflMarkets.length > 0) {
           console.log('Sample market:', JSON.stringify(nflMarkets[0], null, 2));
         }
-        return nflMarkets;
+        return { markets: nflMarkets, hasChanges };
       } catch (error) {
         console.warn('Using mock data:', error.message);
         state.markets = MOCK_MARKETS.map(parseMarketData);
@@ -940,13 +1764,38 @@
       }
     }
 
+    async function fetchCrowdVotes() {
+      try {
+        const response = await fetch(`${CONFIG.apiUrl}/results`);
+        if (!response.ok) throw new Error('API error');
+        const data = await response.json();
+
+        // Map vote results to market slugs
+        // Results are keyed by market slug, yesPercent is 0-100
+        if (data.results) {
+          Object.keys(data.results).forEach(slug => {
+            const result = data.results[slug];
+            if (result.total >= 1) { // Only use if at least 1 vote
+              // Convert yesPercent (0-100) to decimal (0-1)
+              state.crowdVotes[slug] = result.yesPercent / 100;
+            }
+          });
+          console.log(`Loaded crowd votes for ${Object.keys(state.crowdVotes).length} markets`);
+        }
+      } catch (error) {
+        console.warn('Could not fetch crowd votes:', error.message);
+      }
+    }
+
     // ============================================
     // UI RENDERING
     // ============================================
     function renderHeroMarket() {
       if (state.markets.length === 0) return;
 
-      const market = state.markets[state.heroIndex % state.markets.length];
+      // Hero cycles through top 10 markets by volume (markets already sorted by volume)
+      const top10Markets = state.markets.slice(0, 10);
+      const market = top10Markets[state.heroIndex % top10Markets.length];
       const heroCard = document.getElementById('heroCard');
 
       document.getElementById('heroQuestion').textContent = market.question;
@@ -954,6 +1803,11 @@
 
       const outcomesContainer = document.getElementById('heroOutcomes');
       const barClasses = ['primary', 'secondary', 'tertiary', 'quaternary'];
+
+      // Check for price change on this market
+      const prices = market.outcomePrices || [];
+      const topPrice = parseFloat(prices[0] || 0);
+      const priceChange = getPriceChange(market.id || market.slug, topPrice);
 
       // Get top 8 outcomes
       const topOutcomes = market.outcomes
@@ -967,17 +1821,20 @@
 
       const maxPrice = Math.max(...topOutcomes.map(o => o.price), 0.01);
 
-      outcomesContainer.innerHTML = topOutcomes.map((outcome, i) => `
-        <div class="outcome-row">
+      outcomesContainer.innerHTML = topOutcomes.map((outcome, i) => {
+        const arrow = i === 0 ? getChangeArrow(priceChange) : '';
+        const highlightClass = i === 0 && Math.abs(priceChange) > 0.005 ? 'value-changed' : '';
+        return `
+        <div class="outcome-row ${i === 0 && Math.abs(priceChange) > 0.005 ? (priceChange > 0 ? 'price-up' : 'price-down') : ''}">
           <span class="outcome-name">${outcome.name}</span>
           <div class="outcome-bar-container">
             <div class="outcome-bar ${barClasses[i % barClasses.length]}"
                  style="width: ${(outcome.price / maxPrice) * 100}%"></div>
           </div>
-          <span class="outcome-price">${formatPrice(outcome.price)}</span>
+          <span class="outcome-price ${highlightClass}">${formatPrice(outcome.price)}${arrow}</span>
           <span class="outcome-change ${getChangeClass(outcome.change)}">${formatChange(outcome.change)}</span>
         </div>
-      `).join('');
+      `}).join('');
 
       // Render sparkline based on 7-day price trend
       renderSparkline(market);
@@ -988,31 +1845,78 @@
       // Fetch vote stats for this market
       fetchVoteStats(market.slug || market.id);
 
-      // Flash effect
-      heroCard.classList.add('data-updated');
-      setTimeout(() => heroCard.classList.remove('data-updated'), 500);
+      // Apply glow effect if price changed significantly
+      heroCard.classList.remove('card-glow-up', 'card-glow-down', 'data-updated');
+      if (Math.abs(priceChange) > 0.005) {
+        heroCard.classList.add(priceChange > 0 ? 'card-glow-up' : 'card-glow-down');
+      } else {
+        heroCard.classList.add('data-updated');
+      }
+      setTimeout(() => heroCard.classList.remove('data-updated', 'card-glow-up', 'card-glow-down'), 2000);
     }
 
-    function renderSparkline(market) {
+    async function renderSparkline(market) {
       const container = document.getElementById('sparkline');
       const bars = 30;
-      const heights = [];
 
-      // Use oneWeekPriceChange to simulate a 7-day trend
+      // Try to get real price history
+      try {
+        // Get the first token ID (Yes outcome)
+        let tokenIds = market.clobTokenIds;
+        if (typeof tokenIds === 'string') {
+          tokenIds = JSON.parse(tokenIds);
+        }
+
+        if (tokenIds && tokenIds[0]) {
+          const response = await fetch(`${CONFIG.apiUrl}/prices/${tokenIds[0]}?interval=1w&fidelity=360`);
+          if (response.ok) {
+            const data = await response.json();
+            const history = data.history || [];
+
+            if (history.length > 0) {
+              // Sample history to get ~30 data points
+              const step = Math.max(1, Math.floor(history.length / bars));
+              const sampled = [];
+              for (let i = 0; i < history.length; i += step) {
+                sampled.push(history[i].p);
+                if (sampled.length >= bars) break;
+              }
+
+              // Normalize prices to bar heights (20-100%)
+              const minPrice = Math.min(...sampled);
+              const maxPrice = Math.max(...sampled);
+              const range = maxPrice - minPrice || 0.1;
+
+              const heights = sampled.map(p => {
+                const normalized = ((p - minPrice) / range) * 80 + 20;
+                return Math.max(20, Math.min(100, normalized));
+              });
+
+              container.innerHTML = heights.map(h =>
+                `<div class="sparkline-bar" style="height: ${h}%"></div>`
+              ).join('');
+
+              console.log(`Sparkline: ${history.length} points -> ${sampled.length} bars`);
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Could not fetch price history:', error.message);
+      }
+
+      // Fallback: generate from oneWeekPriceChange
       const weekChange = parseFloat(market?.oneWeekPriceChange || 0);
       const currentPrice = parseFloat(market?.outcomePrices?.[0] || 0.5);
-
-      // Calculate start price from current and change
       const startPrice = currentPrice - weekChange;
-      const priceRange = Math.abs(weekChange) + 0.1; // Add padding
+      const priceRange = Math.abs(weekChange) + 0.1;
 
-      // Generate trend line with some noise
+      const heights = [];
       for (let i = 0; i < bars; i++) {
         const progress = i / (bars - 1);
         const trendValue = startPrice + (weekChange * progress);
         const noise = (Math.random() - 0.5) * 0.03;
         const value = trendValue + noise;
-        // Normalize to 20-100% height
         const normalized = ((value - startPrice + priceRange/2) / priceRange) * 80 + 20;
         heights.push(Math.max(20, Math.min(100, normalized)));
       }
@@ -1030,6 +1934,116 @@
       return question.substring(0, 30);
     }
 
+    function extractMarketCategory(question) {
+      // Extract the category/event from question
+      // "Will the Chiefs win Super Bowl 2026?" -> "Super Bowl 2026"
+      // "Will Chris Godwin be the 2025-2026 NFL Comeback Player of the Year?" -> "NFL Comeback Player of the Year"
+
+      // Pattern: "win [the] X" or "win X"
+      let match = question.match(/win (?:the )?(.+?)(?:\?|$)/i);
+      if (match) return match[1].trim();
+
+      // Pattern: "be the X"
+      match = question.match(/be (?:the )?(\d{4}[-–]\d{4} )?(.+?)(?:\?|$)/i);
+      if (match) return (match[1] || '') + match[2].trim();
+
+      // Pattern: "make [their] X"
+      match = question.match(/make (?:their |the )?(.+?)(?:\?|$)/i);
+      if (match) return match[1].trim();
+
+      return question;
+    }
+
+    function groupMarketsByCategory(markets) {
+      const groups = new Map();
+
+      markets.forEach(market => {
+        const category = extractMarketCategory(market.question);
+        const outcome = extractMarketName(market.question);
+        const prices = market.outcomePrices || [];
+        const yesPrice = parseFloat(prices[0] || 0);
+        const change = parseFloat(market.oneDayPriceChange || 0);
+
+        if (!groups.has(category)) {
+          groups.set(category, {
+            category,
+            outcomes: [],
+            totalVolume: 0
+          });
+        }
+
+        const group = groups.get(category);
+        group.outcomes.push({
+          name: outcome,
+          price: yesPrice,
+          change: change,
+          volume: market.volume || 0,
+          slug: market.slug
+        });
+        group.totalVolume += (market.volume || 0);
+      });
+
+      // Sort outcomes within each group by price
+      groups.forEach(group => {
+        group.outcomes.sort((a, b) => b.price - a.price);
+      });
+
+      // Convert to array and sort by total volume
+      return Array.from(groups.values())
+        .sort((a, b) => b.totalVolume - a.totalVolume);
+    }
+
+    // Group markets by Polymarket event ID (events[0].id)
+    function groupMarketsByEvent(markets) {
+      const groups = new Map();
+
+      markets.forEach(market => {
+        // Get event info from the market
+        const event = market.events?.[0];
+        if (!event?.id) return; // Skip markets without event grouping
+
+        const eventId = event.id;
+        const eventTitle = event.title || 'Unknown Event';
+
+        // Use groupItemTitle for display name, fallback to extracting from question
+        const displayName = market.groupItemTitle || extractMarketName(market.question);
+
+        const prices = market.outcomePrices || [];
+        const yesPrice = parseFloat(prices[0] || 0);
+        const change = parseFloat(market.oneDayPriceChange || 0);
+
+        if (!groups.has(eventId)) {
+          groups.set(eventId, {
+            eventId,
+            title: eventTitle.trim(),
+            outcomes: [],
+            totalVolume: parseFloat(event.volume) || 0,
+            liquidity: parseFloat(event.liquidity) || 0
+          });
+        }
+
+        const group = groups.get(eventId);
+        group.outcomes.push({
+          name: displayName,
+          price: yesPrice,
+          change: change,
+          volume: market.volume || 0,
+          slug: market.slug,
+          marketId: market.id
+        });
+      });
+
+      // Sort outcomes within each group by price (highest probability first)
+      groups.forEach(group => {
+        group.outcomes.sort((a, b) => b.price - a.price);
+      });
+
+      // Convert to array and sort by total volume
+      return Array.from(groups.values())
+        .filter(g => g.outcomes.length > 1) // Only show groups with multiple outcomes
+        .sort((a, b) => b.totalVolume - a.totalVolume);
+    }
+
     function renderMovers() {
       if (state.markets.length === 0) return;
 
@@ -1040,6 +2054,7 @@
           const prices = market.outcomePrices || [];
           const yesPrice = parseFloat(prices[0] || 0);
           return {
+            id: market.slug || market.id,
             name: extractMarketName(market.question),
             market: market.question,
             price: yesPrice,
@@ -1052,44 +2067,132 @@
 
       // If no real movers, show top markets by volume
       const displayMovers = movers.length > 0 ? movers : state.markets.slice(0, 5).map(m => ({
+        id: m.slug || m.id,
         name: extractMarketName(m.question),
         market: m.question,
         price: parseFloat(m.outcomePrices?.[0] || 0),
         change: parseFloat(m.oneDayPriceChange || 0)
       }));
 
-      document.getElementById('moversList').innerHTML = displayMovers.map((mover, i) => `
-        <div class="mover-item">
-          <span class="mover-rank">${i + 1}</span>
-          <div class="mover-info">
-            <div class="mover-name">${mover.name}</div>
-            <div class="mover-market">${mover.market.substring(0, 35)}${mover.market.length > 35 ? '...' : ''}</div>
+      const container = document.getElementById('moversList');
+      const existingItems = container.querySelectorAll('.mover-item');
+
+      // FLIP Animation: Record old positions
+      const oldPositions = {};
+      existingItems.forEach(item => {
+        const id = item.dataset.id;
+        if (id) {
+          oldPositions[id] = item.getBoundingClientRect();
+        }
+      });
+
+      // Build new position map
+      const newPositionMap = {};
+      displayMovers.forEach((mover, i) => {
+        newPositionMap[mover.id] = i;
+      });
+
+      // Determine which items moved up or down
+      const oldPositionMap = {};
+      existingItems.forEach((item, i) => {
+        const id = item.dataset.id;
+        if (id) oldPositionMap[id] = i;
+      });
+
+      // Update DOM
+      container.innerHTML = displayMovers.map((mover, i) => {
+        const oldIdx = oldPositionMap[mover.id];
+        let moveClass = '';
+        if (oldIdx !== undefined && oldIdx !== i) {
+          moveClass = oldIdx > i ? 'moving-up' : 'moving-down';
+        }
+        return `
+          <div class="mover-item ${moveClass}" data-id="${mover.id}">
+            <span class="mover-rank">${i + 1}</span>
+            <div class="mover-info">
+              <div class="mover-market">${mover.market}</div>
+            </div>
+            <span class="mover-change ${getChangeClass(mover.change)}">${formatChange(mover.change)}</span>
           </div>
-          <span class="mover-change ${getChangeClass(mover.change)}">${formatChange(mover.change)}</span>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+
+      // FLIP Animation: Animate from old to new positions
+      const newItems = container.querySelectorAll('.mover-item');
+      newItems.forEach(item => {
+        const id = item.dataset.id;
+        if (oldPositions[id]) {
+          const oldRect = oldPositions[id];
+          const newRect = item.getBoundingClientRect();
+          const deltaY = oldRect.top - newRect.top;
+
+          if (Math.abs(deltaY) > 5) {
+            // Apply inverse transform
+            item.style.transform = `translateY(${deltaY}px)`;
+            item.style.transition = 'none';
+
+            // Force reflow
+            item.offsetHeight;
+
+            // Animate to final position
+            item.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            item.style.transform = 'translateY(0)';
+          }
+        }
+      });
+
+      // Clean up animation classes after animation completes
+      setTimeout(() => {
+        newItems.forEach(item => {
+          item.classList.remove('moving-up', 'moving-down');
+        });
+      }, 600);
     }
 
     function renderTicker() {
-      console.log('renderTicker called, markets:', state.markets.length);
+      console.log('renderTicker called, markets:', state.markets.length, 'grouped:', state.groupedEvents.length);
+
+      // Use grouped events if available
+      if (state.groupedEvents.length > 0) {
+        const tickerItems = state.groupedEvents.map(group => {
+          // Get top 3 outcomes for each group
+          const topOutcomes = group.outcomes.slice(0, 3)
+            .map(o => `${o.name} ${formatPrice(o.price)}`)
+            .join(' · ');
+          return {
+            title: group.title,
+            outcomes: topOutcomes
+          };
+        });
+
+        const itemsHtml = tickerItems.map(item => `
+          <div class="ticker-item">
+            <span class="ticker-name ticker-event-title">${item.title}:</span>
+            <span class="ticker-outcomes">${item.outcomes}</span>
+          </div>
+          <span class="ticker-divider">|</span>
+        `).join('');
+
+        document.getElementById('tickerContent').innerHTML = itemsHtml + itemsHtml;
+        console.log('Ticker rendered with grouped events');
+        return;
+      }
+
+      // Fallback: show individual markets
       if (state.markets.length === 0) {
         console.log('No markets for ticker');
         return;
       }
 
-      // One entry per market with extracted name and Yes price
       const tickerItems = state.markets.map(market => {
         const prices = market.outcomePrices || [];
         return {
-          name: extractMarketName(market.question),
+          name: market.question,
           price: formatPrice(prices[0] || 0),
           change: market.oneDayPriceChange || 0
         };
       });
 
-      console.log('Ticker items:', tickerItems.length);
-
-      // Duplicate for seamless loop
       const itemsHtml = tickerItems.map(item => `
         <div class="ticker-item">
           <span class="ticker-name">${item.name}</span>
@@ -1110,27 +2213,23 @@
       const voteUrl = `${CONFIG.voteAppUrl}/${marketSlug}?t=${state.currentToken}`;
       console.log('Generating QR for:', voteUrl);
 
-      // Use toDataURL for more reliable rendering
-      QRCode.toDataURL(voteUrl, {
-        width: 160,
-        margin: 1,
-        color: {
-          dark: '#000000',
-          light: '#ffffff'
-        }
-      }, (error, url) => {
-        if (error) {
-          console.error('QR generation error:', error);
-          container.innerHTML = '<div style="color: #666; font-size: 12px;">QR Error</div>';
-          return;
-        }
+      try {
+        // Use qrcode-generator library
+        const qr = qrcode(0, 'M'); // 0 = auto type, M = medium error correction
+        qr.addData(voteUrl);
+        qr.make();
+
+        // Create image from QR code
         const img = document.createElement('img');
-        img.src = url;
+        img.src = qr.createDataURL(4, 0); // cell size 4, margin 0
         img.style.width = '160px';
         img.style.height = '160px';
         container.appendChild(img);
-        console.log('QR code generated');
-      });
+        console.log('QR code generated successfully');
+      } catch (error) {
+        console.error('QR generation error:', error);
+        container.innerHTML = '<div style="color: #666; font-size: 12px;">QR Error: ' + error.message + '</div>';
+      }
     }
 
     function updateCountdown() {
@@ -1149,32 +2248,108 @@
       document.getElementById('countdown').textContent = `${days}D ${hours}H ${minutes}M`;
     }
 
-    function updateVoteWindow() {
-      const elapsed = Math.floor((Date.now() - state.windowStartTime) / 1000);
-      const remaining = Math.max(0, CONFIG.windowDuration - elapsed);
+    async function updateVoteStats() {
+      // Fetch total votes across ALL markets
+      try {
+        const response = await fetch(`${CONFIG.apiUrl}/results`);
+        if (response.ok) {
+          const data = await response.json();
+          state.voteStats.total = data.totalVotes || 0;
+        }
+      } catch (error) {
+        console.warn('Could not fetch vote stats:', error.message);
+      }
+      // Update display
+      document.getElementById('totalVotes').textContent = state.voteStats.total;
+    }
 
-      const minutes = Math.floor(remaining / 60);
-      const seconds = remaining % 60;
+    function renderSecondaryMarkets() {
+      const container = document.getElementById('secondaryMarkets');
 
-      document.getElementById('voteWindowTime').textContent =
-        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      // If we have grouped events, show 3 at a time (rotating)
+      if (state.groupedEvents.length > 0) {
+        // Get 3 groups starting from current index, cycling through all
+        const displayGroups = [];
+        for (let i = 0; i < 3; i++) {
+          const idx = (state.groupIndex + i) % state.groupedEvents.length;
+          displayGroups.push(state.groupedEvents[idx]);
+        }
+        const topGroups = displayGroups;
 
-      // Reset window if expired
-      if (remaining === 0) {
-        state.currentToken = generateToken();
-        state.windowStartTime = Date.now();
-        state.voteStats.window = 0;
+        container.innerHTML = topGroups.map(group => {
+          // Show top 4 contenders for each group
+          const topOutcomes = group.outcomes.slice(0, 4);
 
-        // Update QR with new token
-        if (state.markets.length > 0) {
-          const market = state.markets[state.heroIndex % state.markets.length];
-          updateQRCode(market.slug || market.id);
+          // Check if any outcome in this group has changed
+          let groupChange = 0;
+          topOutcomes.forEach(o => {
+            const change = getPriceChange(o.marketId || o.slug, o.price);
+            if (Math.abs(change) > Math.abs(groupChange)) groupChange = change;
+          });
+
+          const cardGlowClass = Math.abs(groupChange) > 0.005
+            ? (groupChange > 0 ? 'card-glow-up' : 'card-glow-down')
+            : '';
+
+          return `
+            <div class="secondary-market-card grouped ${cardGlowClass}">
+              <div class="secondary-market-category">${group.title}</div>
+              <div class="secondary-market-outcomes">
+                ${topOutcomes.map((outcome, idx) => {
+                  const priceChange = getPriceChange(outcome.marketId || outcome.slug, outcome.price);
+                  const arrow = getChangeArrow(priceChange);
+                  const highlightClass = Math.abs(priceChange) > 0.005 ? 'value-changed' : '';
+                  const rowFlashClass = Math.abs(priceChange) > 0.005
+                    ? (priceChange > 0 ? 'price-up' : 'price-down')
+                    : '';
+                  return `
+                  <div class="outcome-row-mini ${rowFlashClass}">
+                    <span class="outcome-name-mini">${idx + 1}. ${outcome.name}</span>
+                    <span class="outcome-price-mini ${highlightClass}">${formatPrice(outcome.price)}${arrow}</span>
+                  </div>
+                `}).join('')}
+              </div>
+              <div class="secondary-market-volume">${formatVolume(group.totalVolume)} staked</div>
+            </div>
+          `;
+        }).join('');
+        return;
+      }
+
+      // Fallback: show individual markets if no grouped events
+      if (state.markets.length < 2) return;
+
+      const secondaryMarkets = [];
+      for (let i = 1; i <= 6; i++) {
+        const idx = (state.heroIndex + i) % state.markets.length;
+        if (idx !== state.heroIndex % state.markets.length) {
+          secondaryMarkets.push(state.markets[idx]);
         }
       }
 
-      // Update vote stats display
-      document.getElementById('windowVotes').textContent = state.voteStats.window;
-      document.getElementById('totalVotes').textContent = state.voteStats.total;
+      container.innerHTML = secondaryMarkets.map(market => {
+        const prices = market.outcomePrices || [];
+        const yesPrice = parseFloat(prices[0] || 0);
+        const change = parseFloat(market.oneDayPriceChange || 0);
+        const volume = market.volume || 0;
+        const priceChange = getPriceChange(market.id || market.slug, yesPrice);
+        const arrow = getChangeArrow(priceChange);
+        const cardGlowClass = Math.abs(priceChange) > 0.005
+          ? (priceChange > 0 ? 'card-glow-up' : 'card-glow-down')
+          : '';
+        const highlightClass = Math.abs(priceChange) > 0.005 ? 'value-changed' : '';
+
+        return `
+          <div class="secondary-market-card ${cardGlowClass}">
+            <div class="secondary-market-question">${market.question}</div>
+            <div class="secondary-market-price">
+              <span class="secondary-market-value ${highlightClass}">${formatPrice(yesPrice)}${arrow}</span>
+              <span class="secondary-market-change ${getChangeClass(change)}">${formatChange(change)}</span>
+            </div>
+            <div class="secondary-market-volume">${formatVolume(volume)} staked</div>
+          </div>
+        `;
+      }).join('');
     }
 
     // ============================================
@@ -1185,28 +2360,47 @@
 
       // Initial data fetch
       await fetchMarkets();
+      await fetchCrowdVotes();
       console.log('Markets loaded:', state.markets.length);
 
       // Initial render with error handling
       try { renderHeroMarket(); console.log('Hero rendered'); } catch(e) { console.error('Hero error:', e); }
+      try { renderSecondaryMarkets(); console.log('Secondary markets rendered'); } catch(e) { console.error('Secondary error:', e); }
       try { renderMovers(); console.log('Movers rendered'); } catch(e) { console.error('Movers error:', e); }
       try { renderTicker(); console.log('Ticker rendered'); } catch(e) { console.error('Ticker error:', e); }
+      try { renderEditorial(); console.log('Editorial rendered'); } catch(e) { console.error('Editorial error:', e); }
       try { updateCountdown(); } catch(e) { console.error('Countdown error:', e); }
 
       // Update loops
       setInterval(updateCountdown, 60000);
-      setInterval(updateVoteWindow, 1000);
+      setInterval(updateVoteStats, 5000);
 
-      // Hero rotation
+      // Hero rotation (cycles through hero markets)
       setInterval(() => {
         state.heroIndex++;
         renderHeroMarket();
       }, CONFIG.heroRotationInterval * 1000);
 
+      // Secondary markets rotation (cycles through all grouped events, 3 at a time)
+      setInterval(() => {
+        if (state.groupedEvents.length > 3) {
+          state.groupIndex = (state.groupIndex + 3) % state.groupedEvents.length;
+          renderSecondaryMarkets();
+        }
+      }, 15000); // Rotate every 15 seconds
+
+      // Editorial rotation (cycles through themes)
+      setInterval(() => {
+        state.editorialIndex++;
+        renderEditorial();
+      }, 20000); // Rotate every 20 seconds
+
       // Data refresh
       setInterval(async () => {
         await fetchMarkets();
+        await fetchCrowdVotes();
         renderHeroMarket();
+        renderSecondaryMarkets();
         renderMovers();
         renderTicker();
       }, CONFIG.dataRefreshInterval * 1000);

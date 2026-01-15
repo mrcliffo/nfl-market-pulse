@@ -418,6 +418,224 @@
       text-decoration: none;
     }
 
+    /* Market list */
+    .market-list-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--card-border);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .market-list-item:hover, .market-list-item:active {
+      background: rgba(255,255,255,0.06);
+      border-color: var(--orange);
+    }
+
+    .market-list-question {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .market-list-odds {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .market-list-yes {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .market-list-no {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--red);
+    }
+
+    .market-list-volume {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--orange);
+    }
+
+    /* Vote another button */
+    .vote-another-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      margin-top: 20px;
+      background: transparent;
+      border: 2px solid var(--orange);
+      border-radius: 10px;
+      color: var(--orange);
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .vote-another-btn:hover, .vote-another-btn:active {
+      background: var(--orange);
+      color: var(--dark-bg);
+    }
+
+    /* Event groups */
+    .event-group {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .event-group-header {
+      padding: 14px 16px;
+      background: rgba(255, 107, 43, 0.08);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .event-group-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--orange);
+    }
+
+    .event-group-volume {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .event-group-outcomes {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .outcome-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      text-decoration: none;
+      color: inherit;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.2s;
+    }
+
+    .outcome-item:last-child {
+      border-bottom: none;
+    }
+
+    .outcome-item:hover, .outcome-item:active {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .outcome-rank {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .outcome-name {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .outcome-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .outcome-more {
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--blue);
+      background: rgba(0, 180, 255, 0.05);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      user-select: none;
+    }
+
+    .outcome-more:hover {
+      background: rgba(0, 180, 255, 0.1);
+      color: var(--orange);
+    }
+
+    .outcome-more:active {
+      background: rgba(0, 180, 255, 0.15);
+    }
+
+    .hidden-outcomes {
+      display: none;
+    }
+
+    .hidden-outcomes.expanded {
+      display: flex;
+      flex-direction: column;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        max-height: 1000px;
+      }
+    }
+
+    .outcome-more .arrow {
+      display: inline-block;
+      margin-left: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .outcome-more.expanded .arrow {
+      transform: rotate(180deg);
+    }
+
     /* Hidden states */
     .hidden { display: none !important; }
 
@@ -460,13 +678,14 @@
 
     <!-- Market Selection State -->
     <div class="card hidden" id="selectState">
-      <div class="market-label">Select a Market</div>
-      <h1 class="market-question" style="font-size: 20px; margin-bottom: 20px;">Choose an NFL market to vote on</h1>
-      <div id="marketList" style="display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto;"></div>
+      <div class="market-label">All NFL Markets</div>
+      <h1 class="market-question" style="font-size: 20px; margin-bottom: 20px;">Choose a market to vote on</h1>
+      <div id="marketList" style="display: flex; flex-direction: column; gap: 12px;"></div>
     </div>
 
     <!-- Vote State -->
     <div class="card hidden" id="voteState">
+      <a href="/vote" class="back-link">&larr; All Markets</a>
       <div class="market-label">Current Market</div>
       <h1 class="market-question" id="marketQuestion"></h1>
 
@@ -507,7 +726,7 @@
       </div>
 
       <div class="result-row">
-        <span class="result-label">Crowd Says YES</span>
+        <span class="result-label" id="crowdLabel">Crowd Says YES</span>
         <span class="result-value" id="crowdVote">--</span>
       </div>
 
@@ -520,6 +739,8 @@
         <div class="insight-label">Insight</div>
         <div class="insight-text" id="insightText">Loading...</div>
       </div>
+
+      <a href="/vote" class="vote-another-btn">Vote on Another Market</a>
     </div>
 
     <footer class="footer">
@@ -840,9 +1061,16 @@
       yourVoteEl.textContent = vote.toUpperCase();
       yourVoteEl.className = 'result-value ' + vote;
 
-      // Crowd vote
-      const crowdPercent = results.yesPercent || 50;
-      document.getElementById('crowdVote').textContent = crowdPercent + '%';
+      // Crowd vote - show majority
+      const yesPercent = results.yesPercent || 50;
+      const noPercent = results.noPercent || 50;
+      const crowdSaysYes = yesPercent >= noPercent;
+      const crowdPercent = crowdSaysYes ? yesPercent : noPercent;
+
+      document.getElementById('crowdLabel').textContent = crowdSaysYes ? 'Crowd Says YES' : 'Crowd Says NO';
+      const crowdVoteEl = document.getElementById('crowdVote');
+      crowdVoteEl.textContent = crowdPercent + '%';
+      crowdVoteEl.className = 'result-value ' + (crowdSaysYes ? 'yes' : 'no');
 
       // Market price
       const marketPercent = (state.market.yesPrice * 100).toFixed(1);
@@ -882,17 +1110,72 @@
         if (!response.ok) throw new Error('API unavailable');
         const markets = await response.json();
 
-        // Filter for NFL markets
-        const nflMarkets = markets.filter(m => {
-          const q = (m.question || '').toLowerCase();
-          return CONFIG.nflTerms.some(term => q.includes(term.toLowerCase()));
-        }).slice(0, 15); // Show top 15
+        // API already filters for NFL markets, just sort by volume
+        const nflMarkets = markets
+          .sort((a, b) => (b.volume || 0) - (a.volume || 0));
 
         return nflMarkets;
       } catch (error) {
         console.error('Failed to fetch markets:', error);
         return [];
       }
+    }
+
+    function formatVolume(vol) {
+      if (vol >= 1000000) return '$' + (vol / 1000000).toFixed(1) + 'M';
+      if (vol >= 1000) return '$' + (vol / 1000).toFixed(0) + 'K';
+      return '$' + (vol || 0);
+    }
+
+    // Group markets by Polymarket event ID
+    function groupMarketsByEvent(markets) {
+      const groups = new Map();
+      const ungrouped = [];
+
+      markets.forEach(market => {
+        const event = market.events?.[0];
+        if (!event?.id) {
+          ungrouped.push(market);
+          return;
+        }
+
+        const eventId = event.id;
+        const eventTitle = event.title || 'Unknown Event';
+        const displayName = market.groupItemTitle || market.question;
+
+        const prices = typeof market.outcomePrices === 'string'
+          ? JSON.parse(market.outcomePrices)
+          : market.outcomePrices;
+        const yesPrice = parseFloat(prices?.[0] || 0);
+
+        if (!groups.has(eventId)) {
+          groups.set(eventId, {
+            eventId,
+            title: eventTitle.trim(),
+            outcomes: [],
+            totalVolume: parseFloat(event.volume) || 0
+          });
+        }
+
+        groups.get(eventId).outcomes.push({
+          name: displayName,
+          price: yesPrice,
+          slug: market.slug,
+          volume: market.volume || 0
+        });
+      });
+
+      // Sort outcomes by price
+      groups.forEach(group => {
+        group.outcomes.sort((a, b) => b.price - a.price);
+      });
+
+      // Convert to array and sort by volume
+      const groupedArray = Array.from(groups.values())
+        .filter(g => g.outcomes.length > 1)
+        .sort((a, b) => b.totalVolume - a.totalVolume);
+
+      return { grouped: groupedArray, ungrouped };
     }
 
     function renderMarketList(markets) {
@@ -903,18 +1186,89 @@
         return;
       }
 
-      container.innerHTML = markets.map(m => {
+      // Group markets by event
+      const { grouped, ungrouped } = groupMarketsByEvent(markets);
+
+      let html = '';
+
+      // Render grouped events first
+      grouped.forEach((group, groupIdx) => {
+        const visibleOutcomes = group.outcomes.slice(0, 5);
+        const hiddenOutcomes = group.outcomes.slice(5);
+        const hasHidden = hiddenOutcomes.length > 0;
+
+        html += `
+          <div class="event-group">
+            <div class="event-group-header">
+              <div class="event-group-title">${group.title}</div>
+              <div class="event-group-volume">${formatVolume(group.totalVolume)} staked</div>
+            </div>
+            <div class="event-group-outcomes">
+              ${visibleOutcomes.map((o, idx) => `
+                <a href="/vote/${o.slug}" class="outcome-item">
+                  <span class="outcome-rank">${idx + 1}</span>
+                  <span class="outcome-name">${o.name}</span>
+                  <span class="outcome-price">${(o.price * 100).toFixed(1)}%</span>
+                </a>
+              `).join('')}
+              ${hasHidden ? `
+                <div class="hidden-outcomes" id="hidden-${groupIdx}">
+                  ${hiddenOutcomes.map((o, idx) => `
+                    <a href="/vote/${o.slug}" class="outcome-item">
+                      <span class="outcome-rank">${idx + 6}</span>
+                      <span class="outcome-name">${o.name}</span>
+                      <span class="outcome-price">${(o.price * 100).toFixed(1)}%</span>
+                    </a>
+                  `).join('')}
+                </div>
+                <div class="outcome-more" onclick="toggleHiddenOutcomes(${groupIdx}, ${hiddenOutcomes.length})" id="toggle-${groupIdx}">
+                  <span class="toggle-text">Show ${hiddenOutcomes.length} more</span>
+                  <span class="arrow">▼</span>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      // Render ungrouped markets
+      ungrouped.forEach(m => {
         const prices = typeof m.outcomePrices === 'string' ? JSON.parse(m.outcomePrices) : m.outcomePrices;
-        const price = (parseFloat(prices?.[0] || 0.5) * 100).toFixed(0);
-        return `
-          <a href="/vote/${m.slug}" style="display: flex; justify-content: space-between; align-items: center; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 8px; text-decoration: none; color: inherit; border: 1px solid var(--card-border);">
-            <span style="flex: 1; font-size: 14px;">${m.question}</span>
-            <span style="font-family: 'Oswald', sans-serif; font-size: 18px; color: var(--blue); margin-left: 12px;">${price}%</span>
+        const yesPrice = (parseFloat(prices?.[0] || 0.5) * 100).toFixed(1);
+        const noPrice = (100 - parseFloat(yesPrice)).toFixed(1);
+        const volume = formatVolume(m.volume || 0);
+        html += `
+          <a href="/vote/${m.slug}" class="market-list-item">
+            <div class="market-list-question">${m.question}</div>
+            <div class="market-list-odds">
+              <span class="market-list-yes">Yes ${yesPrice}%</span>
+              <span class="market-list-no">No ${noPrice}%</span>
+            </div>
+            <div class="market-list-volume">${volume} staked</div>
           </a>
         `;
-      }).join('');
+      });
 
+      container.innerHTML = html;
       showState('selectState');
+    }
+
+    function toggleHiddenOutcomes(groupIdx, count) {
+      const hiddenEl = document.getElementById(`hidden-${groupIdx}`);
+      const toggleEl = document.getElementById(`toggle-${groupIdx}`);
+      const textEl = toggleEl.querySelector('.toggle-text');
+
+      const isExpanded = hiddenEl.classList.contains('expanded');
+
+      if (isExpanded) {
+        hiddenEl.classList.remove('expanded');
+        toggleEl.classList.remove('expanded');
+        textEl.textContent = `Show ${count} more`;
+      } else {
+        hiddenEl.classList.add('expanded');
+        toggleEl.classList.add('expanded');
+        textEl.textContent = `Show less`;
+      }
     }
 
     async function initialize() {

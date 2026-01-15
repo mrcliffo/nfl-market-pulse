@@ -912,6 +912,9 @@
         state.usingMockData = false;
         document.getElementById('errorBadge').classList.remove('visible');
         console.log(`Loaded ${nflMarkets.length} NFL markets from Polymarket`);
+        if (nflMarkets.length > 0) {
+          console.log('Sample market:', JSON.stringify(nflMarkets[0], null, 2));
+        }
         return nflMarkets;
       } catch (error) {
         console.warn('Using mock data:', error.message);
@@ -1147,12 +1150,13 @@
 
       // Initial data fetch
       await fetchMarkets();
+      console.log('Markets loaded:', state.markets.length);
 
-      // Initial render
-      renderHeroMarket();
-      renderMovers();
-      renderTicker();
-      updateCountdown();
+      // Initial render with error handling
+      try { renderHeroMarket(); console.log('Hero rendered'); } catch(e) { console.error('Hero error:', e); }
+      try { renderMovers(); console.log('Movers rendered'); } catch(e) { console.error('Movers error:', e); }
+      try { renderTicker(); console.log('Ticker rendered'); } catch(e) { console.error('Ticker error:', e); }
+      try { updateCountdown(); } catch(e) { console.error('Countdown error:', e); }
 
       // Update loops
       setInterval(updateCountdown, 60000);

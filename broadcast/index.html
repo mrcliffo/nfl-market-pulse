@@ -340,6 +340,11 @@
     .editorial-label.debate { color: #a29bfe; }
     .editorial-label.gap { color: var(--blue); }
     .editorial-label.win { color: var(--green); }
+    .editorial-label.longshot { color: #f1c40f; }
+    .editorial-label.favorite { color: #e056fd; }
+    .editorial-label.volume { color: #00cec9; }
+    .editorial-label.fading { color: var(--red); }
+    .editorial-label.engaged { color: #fd79a8; }
 
     .editorial-title {
       font-family: 'Oswald', sans-serif;
@@ -1329,6 +1334,116 @@
         "This is what betting on yourself looks like. ${profit} profit on $100.",
         "The doubters are quiet. The winners are cashing ${payout} per $100 staked.",
         "Against the odds, into the money. $100 became ${payout}."
+      ],
+      longshotWatch: [
+        "The market says no way. But momentum says... maybe?",
+        "At these odds, believers get paid BIG if they're right.",
+        "A longshot climbing the ladder. Early believers are watching closely.",
+        "The market has them written off. The trend says not so fast.",
+        "Underdogs don't stay underdogs forever. This one's making noise.",
+        "Low probability, high potential. The ultimate contrarian play.",
+        "The market is sleeping on this one. Are you?",
+        "Single-digit odds but double-digit momentum. Something's brewing.",
+        "Every dynasty started as a longshot. Just saying.",
+        "The payout potential here is massive. Risk vs reward at its finest.",
+        "Longshots make legends. This one's trending in the right direction.",
+        "The market hasn't caught on yet. Early movers get rewarded.",
+        "Written off by Vegas, backed by believers. Classic underdog story.",
+        "At these prices, it doesn't take much to be right.",
+        "The market's doubt is your opportunity. If you're bold enough.",
+        "Climbing from the basement. Longshot watch is ON.",
+        "Low odds, high drama. This is what makes sports betting fun.",
+        "The analytics say unlikely. The trend says hold my beer.",
+        "A spark in the darkness. Longshot believers, assemble.",
+        "The market priced them out. Are they pricing themselves back in?"
+      ],
+      crowdFavorites: [
+        "The fans have spoken. And they're not being subtle about it.",
+        "Near-unanimous conviction from the crowd. That's rare.",
+        "When the audience agrees this strongly, it's worth noting.",
+        "The people are ALL IN on this one. No hesitation.",
+        "Crowd consensus is off the charts. Everyone sees the same thing.",
+        "Democracy in action. The fans have made their pick crystal clear.",
+        "This isn't a debate anymore. The crowd has decided.",
+        "Overwhelming fan confidence. The market might want to pay attention.",
+        "The voice of the people is LOUD on this one.",
+        "Fan conviction at maximum. Is the market listening?",
+        "The crowd sees something here. Something big.",
+        "When everyone agrees, either everyone's right or everyone's wrong.",
+        "Peak fan confidence. This is as decisive as it gets.",
+        "The audience has chosen their champion. No close calls here.",
+        "Consensus pick. The fans are speaking with one voice.",
+        "Maximum crowd conviction. The debate is over.",
+        "The people's choice, overwhelmingly. Time will tell if they're right.",
+        "Fan favorite status: LOCKED IN.",
+        "Crowd wisdom or crowd delusion? Either way, they're committed.",
+        "The fans aren't hedging. They're ALL the way in."
+      ],
+      volumeSurge: [
+        "Money is POURING in. Something's got people's attention.",
+        "Volume spike detected. Big money is making moves.",
+        "The betting window just got busy. Way busy.",
+        "A surge of conviction. Wallets are opening wide.",
+        "When volume explodes like this, pay attention.",
+        "The market just woke up. Money is flooding in.",
+        "Sudden interest spike. What do they know that we don't?",
+        "Volume doesn't lie. Someone's loading up on this one.",
+        "Cash is flowing. This market just got hot.",
+        "A tidal wave of bets. The market is ON FIRE.",
+        "Volume surge alert. The smart money is active.",
+        "Money talks, and right now it's SCREAMING.",
+        "Betting activity just spiked. Something changed.",
+        "The floodgates opened. Volume is through the roof.",
+        "When this much money moves, it's not random.",
+        "Market activity exploding. Everyone wants a piece.",
+        "The volume tells the story. And it's getting interesting.",
+        "Big money energy. This market is buzzing.",
+        "A rush of bets. The market can feel the momentum.",
+        "Volume spike = conviction spike. The bettors are locked in."
+      ],
+      fadingFast: [
+        "The odds are collapsing. Yesterday's favorite is today's afterthought.",
+        "Fading fast. The market is losing faith quickly.",
+        "A rapid decline. Something went very wrong here.",
+        "From contender to pretender. The drop is brutal.",
+        "The market just delivered a reality check. Ouch.",
+        "Falling like a stone. What changed?",
+        "The hype train derailed. Odds are in freefall.",
+        "A collapse in confidence. The believers are bailing.",
+        "Yesterday's darling, today's discount. The fade is real.",
+        "The market just hit the sell button. Hard.",
+        "Dropping fast. The narrative shifted overnight.",
+        "From hero to zero probability. A harsh correction.",
+        "The bubble burst. This one's fading into oblivion.",
+        "Market confidence evaporating. Not a good sign.",
+        "A steep decline. The smart money saw something.",
+        "Freefall mode activated. The odds tell the story.",
+        "The market just ghosted this pick. RIP to the believers.",
+        "Crashing down. What looked promising now looks desperate.",
+        "A brutal correction. The market shows no mercy.",
+        "Odds melting away. Someone's thesis just got destroyed."
+      ],
+      mostEngaged: [
+        "This market has everyone talking. And voting. A lot.",
+        "Maximum engagement. The fans can't stop weighing in.",
+        "The most-debated market right now. Everyone has an opinion.",
+        "Fan engagement is through the roof. This one matters to people.",
+        "The audience is OBSESSED with this pick. Vote after vote.",
+        "High engagement = high interest. This market has both.",
+        "Everyone wants their voice heard on this one.",
+        "The fans won't stop voting. Peak engagement.",
+        "This market is capturing hearts and minds. Engagement proves it.",
+        "The people are invested. Not just money - opinions too.",
+        "Fan activity is OFF THE CHARTS. What a market.",
+        "Where there's smoke, there's fire. Where there's votes, there's passion.",
+        "The most participatory market of the moment. Join the conversation.",
+        "Engagement levels: maximum. The fans have spoken. A lot.",
+        "This one has the people's attention. All of it.",
+        "Vote count climbing. The fans are locked in.",
+        "When engagement spikes, the market matters. This one matters.",
+        "The audience can't look away. Neither should you.",
+        "Peak fan participation. This is the market everyone cares about.",
+        "Engagement king of the moment. The fans have crowned it."
       ]
     };
 
@@ -1425,11 +1540,135 @@
       };
     }
 
+    function findLongshotWatch() {
+      // Find markets priced under 15% that are gaining momentum (positive price change)
+      const qualifyingMarkets = state.markets.filter(market => {
+        const prices = market.outcomePrices || [];
+        const yesPrice = parseFloat(prices[0] || 0);
+        const change = parseFloat(market.oneDayPriceChange || 0);
+        // Low probability (under 15%) but gaining momentum (positive change)
+        return yesPrice < 0.15 && yesPrice > 0.01 && change > 0.005;
+      }).sort((a, b) => {
+        // Sort by price change descending (biggest movers first)
+        return parseFloat(b.oneDayPriceChange || 0) - parseFloat(a.oneDayPriceChange || 0);
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Rotate through top 8 longshots
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 8);
+      return qualifyingMarkets[idx];
+    }
+
+    function findCrowdFavorite() {
+      // Find markets where crowd voted decisively (90%+ YES or 90%+ NO)
+      const qualifyingMarkets = [];
+
+      state.markets.forEach(market => {
+        const crowdVote = state.crowdVotes[market.slug] || null;
+        if (crowdVote !== null) {
+          // Check if crowd is very decisive (90%+ one way or the other)
+          const conviction = Math.max(crowdVote, 1 - crowdVote);
+          if (conviction >= 0.85) { // 85%+ conviction
+            qualifyingMarkets.push({
+              ...market,
+              crowdVote,
+              conviction,
+              crowdSaysYes: crowdVote > 0.5
+            });
+          }
+        }
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Sort by conviction level descending
+      qualifyingMarkets.sort((a, b) => b.conviction - a.conviction);
+
+      // Rotate through top crowd favorites
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 8);
+      return qualifyingMarkets[idx];
+    }
+
+    function findVolumeSurge() {
+      // Find markets with high 24h volume relative to total volume (recent surge)
+      const qualifyingMarkets = state.markets.filter(market => {
+        const volume24h = parseFloat(market.volume24hr || 0);
+        const totalVolume = parseFloat(market.volume || 0);
+        // 24h volume is at least 10% of total volume (indicates recent surge)
+        // and has meaningful absolute volume
+        return totalVolume > 0 && volume24h > 10000 && (volume24h / totalVolume) > 0.08;
+      }).sort((a, b) => {
+        // Sort by 24h volume descending
+        return parseFloat(b.volume24hr || 0) - parseFloat(a.volume24hr || 0);
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Rotate through top volume markets
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 8);
+      return qualifyingMarkets[idx];
+    }
+
+    function findFadingFast() {
+      // Find markets with significant negative price changes (opposite of big movers)
+      const qualifyingMarkets = state.markets.filter(market => {
+        const change = parseFloat(market.oneDayPriceChange || 0);
+        return change < -0.02; // At least 2% drop
+      }).sort((a, b) => {
+        // Sort by change ascending (biggest drops first)
+        return parseFloat(a.oneDayPriceChange || 0) - parseFloat(b.oneDayPriceChange || 0);
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Rotate through top 10 faders
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 10);
+      return qualifyingMarkets[idx];
+    }
+
+    function findMostEngaged() {
+      // Find markets with the most votes from audience
+      const qualifyingMarkets = [];
+
+      state.markets.forEach(market => {
+        const slug = market.slug;
+        // Check if this market has vote data by looking for it in crowdVotes
+        // We need to also track vote counts - for now, use presence in crowdVotes
+        // as a proxy (markets with votes will be in crowdVotes)
+        if (state.crowdVotes[slug] !== undefined) {
+          qualifyingMarkets.push({
+            ...market,
+            crowdVote: state.crowdVotes[slug],
+            hasVotes: true
+          });
+        }
+      });
+
+      if (qualifyingMarkets.length === 0) return null;
+
+      // Sort by volume as a proxy for engagement (higher volume = more interest)
+      qualifyingMarkets.sort((a, b) => parseFloat(b.volume || 0) - parseFloat(a.volume || 0));
+
+      // Rotate through most engaged markets
+      const idx = state.editorialIndex % Math.min(qualifyingMarkets.length, 8);
+      return qualifyingMarkets[idx];
+    }
+
     function renderEditorial() {
       const card = document.getElementById('editorialCard');
-      // Big Wins removed - requires resolved market tracking we don't have
-      // Sentiment Gaps only shown if we have real crowd vote data
-      const themes = ['bigMovers', 'debateFuel', 'sentimentGaps'];
+      // 8 themes total - original 3 + 5 new ones
+      // Some themes require specific data to be available
+      const themes = [
+        'bigMovers',      // Markets with >2% daily change
+        'debateFuel',     // Markets close to 50/50
+        'sentimentGaps',  // Crowd vs market disagreement (needs votes)
+        'longshotWatch',  // Low odds but gaining momentum
+        'crowdFavorites', // Decisive crowd votes 85%+ (needs votes)
+        'volumeSurge',    // High recent volume activity
+        'fadingFast',     // Biggest price drops
+        'mostEngaged'     // Markets with most audience votes (needs votes)
+      ];
 
       // Try themes starting from current index, skip if no data
       let theme = null;
@@ -1438,6 +1677,26 @@
         const tryTheme = themes[(state.editorialIndex + attempts) % themes.length];
         // Check if this theme has data before selecting it
         if (tryTheme === 'sentimentGaps' && !findSentimentGap()) {
+          attempts++;
+          continue;
+        }
+        if (tryTheme === 'longshotWatch' && !findLongshotWatch()) {
+          attempts++;
+          continue;
+        }
+        if (tryTheme === 'crowdFavorites' && !findCrowdFavorite()) {
+          attempts++;
+          continue;
+        }
+        if (tryTheme === 'volumeSurge' && !findVolumeSurge()) {
+          attempts++;
+          continue;
+        }
+        if (tryTheme === 'fadingFast' && !findFadingFast()) {
+          attempts++;
+          continue;
+        }
+        if (tryTheme === 'mostEngaged' && !findMostEngaged()) {
           attempts++;
           continue;
         }
@@ -1560,6 +1819,128 @@
                 statSecondary: `Payout: ${(1/win.entryPrice).toFixed(2)}x`,
                 copy: copy,
                 meta: `$100 → $${win.payout}`
+              };
+            }
+            break;
+
+          case 'longshotWatch':
+            const longshot = findLongshotWatch();
+            if (longshot) {
+              const prices = longshot.outcomePrices || [];
+              const currentPrice = parseFloat(prices[0] || 0);
+              const change = parseFloat(longshot.oneDayPriceChange || 0);
+              const potentialPayout = (1 / currentPrice).toFixed(1);
+
+              content = {
+                label: 'LONGSHOT WATCH',
+                labelClass: 'longshot',
+                title: getFullMarketTitle(longshot),
+                statPrimary: `${(currentPrice * 100).toFixed(1)}%`,
+                statPrimaryClass: 'neutral',
+                barWidth: currentPrice * 100,
+                barClass: 'green',
+                barContainerClass: '',
+                statSecondary: `+${(change * 100).toFixed(1)}% today · ${potentialPayout}x payout`,
+                copy: getRandomCopy('longshotWatch'),
+                meta: `${formatVolume(longshot.volume || 0)} staked on this market`
+              };
+            }
+            break;
+
+          case 'crowdFavorites':
+            const favorite = findCrowdFavorite();
+            if (favorite) {
+              const crowdVote = favorite.crowdVote;
+              const conviction = favorite.conviction;
+              const crowdSaysYes = favorite.crowdSaysYes;
+              const displayPct = (conviction * 100).toFixed(0);
+
+              content = {
+                label: 'CROWD FAVORITE',
+                labelClass: 'favorite',
+                title: getFullMarketTitle(favorite),
+                statPrimary: `${displayPct}% say ${crowdSaysYes ? 'YES' : 'NO'}`,
+                statPrimaryClass: 'positive',
+                barWidth: conviction * 100,
+                barClass: 'green',
+                barContainerClass: '',
+                statSecondary: `Overwhelming crowd consensus`,
+                copy: getRandomCopy('crowdFavorites'),
+                meta: `${formatVolume(favorite.volume || 0)} staked on this market`
+              };
+            }
+            break;
+
+          case 'volumeSurge':
+            const surge = findVolumeSurge();
+            if (surge) {
+              const volume24h = parseFloat(surge.volume24hr || 0);
+              const totalVolume = parseFloat(surge.volume || 0);
+              const volumePct = ((volume24h / totalVolume) * 100).toFixed(0);
+              const prices = surge.outcomePrices || [];
+              const currentPrice = parseFloat(prices[0] || 0);
+
+              content = {
+                label: 'VOLUME SURGE',
+                labelClass: 'volume',
+                title: getFullMarketTitle(surge),
+                statPrimary: `${formatVolume(volume24h)} in 24h`,
+                statPrimaryClass: 'positive',
+                barWidth: Math.min(volumePct, 100),
+                barClass: 'green',
+                barContainerClass: '',
+                statSecondary: `${volumePct}% of total volume · ${(currentPrice * 100).toFixed(0)}% odds`,
+                copy: getRandomCopy('volumeSurge'),
+                meta: `${formatVolume(totalVolume)} total staked`
+              };
+            }
+            break;
+
+          case 'fadingFast':
+            const fader = findFadingFast();
+            if (fader) {
+              const change = parseFloat(fader.oneDayPriceChange || 0);
+              const prices = fader.outcomePrices || [];
+              const currentPrice = parseFloat(prices[0] || 0);
+              const previousPrice = currentPrice - change;
+
+              content = {
+                label: 'FADING FAST',
+                labelClass: 'fading',
+                title: getFullMarketTitle(fader),
+                statPrimary: `${(previousPrice * 100).toFixed(1)}% → ${(currentPrice * 100).toFixed(1)}%`,
+                statPrimaryClass: 'negative',
+                barWidthStart: Math.max(0, previousPrice * 100),
+                barWidth: currentPrice * 100,
+                barClass: 'red',
+                barContainerClass: '',
+                animateBar: true,
+                statSecondary: `(${(change * 100).toFixed(1)}% today)`,
+                copy: getRandomCopy('fadingFast'),
+                meta: `${formatVolume(fader.volume || 0)} staked on this market`
+              };
+            }
+            break;
+
+          case 'mostEngaged':
+            const engaged = findMostEngaged();
+            if (engaged) {
+              const crowdVote = engaged.crowdVote;
+              const prices = engaged.outcomePrices || [];
+              const marketPrice = parseFloat(prices[0] || 0);
+
+              content = {
+                label: 'MOST ENGAGED',
+                labelClass: 'engaged',
+                title: getFullMarketTitle(engaged),
+                statPrimary: `Crowd: ${(crowdVote * 100).toFixed(0)}% YES`,
+                statPrimaryClass: 'neutral',
+                barWidth: crowdVote * 100,
+                barClass: '',
+                barContainerClass: 'split-bar',
+                statSecondary: `Market: ${(marketPrice * 100).toFixed(0)}%`,
+                copy: getRandomCopy('mostEngaged'),
+                meta: `${formatVolume(engaged.volume || 0)} staked · High fan engagement`
               };
             }
             break;
@@ -2393,7 +2774,7 @@
       setInterval(() => {
         state.editorialIndex++;
         renderEditorial();
-      }, 20000); // Rotate every 20 seconds
+      }, 10000); // Rotate every 10 seconds
 
       // Data refresh
       setInterval(async () => {

@@ -112,7 +112,7 @@ const CONFIG = {
 |-----------|----------|-------------|
 | Hero Market | 30 sec | Rotates through top 10 markets by volume |
 | Secondary Markets | 15 sec | Cycles through grouped events (3 at a time) |
-| Editorial Card | 20 sec | Rotates through themes + different markets |
+| Editorial Card | 10 sec | Rotates through 8 themes + different markets |
 | Vote Stats | 5 sec | Updates total vote count |
 | Countdown | 60 sec | Updates Super Bowl countdown |
 | Data Refresh | 60 sec | Fetches fresh market data + crowd votes from API |
@@ -129,7 +129,7 @@ const CONFIG = {
 - Shows event title, top outcomes with prices, total staked
 
 ### Editorial Card
-Rotating editorial content (20 seconds) with 3 themes, each rotating through multiple qualifying markets:
+Rotating editorial content (10 seconds) with 8 themes, each rotating through multiple qualifying markets:
 
 - **Big Movers:** Markets with >2% daily price change (top 10 by change size)
   - Animated bar showing price movement from old to new value
@@ -142,6 +142,31 @@ Rotating editorial content (20 seconds) with 3 themes, each rotating through mul
 - **Sentiment Gaps:** Markets where fan votes differ from market price (real data only)
   - Shows market price vs crowd vote percentage
   - Only displays when real vote data exists (no simulated data)
+  - 20 editorial copy variations
+
+- **Longshot Watch:** Markets priced under 15% that are gaining momentum
+  - Shows current odds and potential payout multiplier
+  - Only displays when longshots have positive price movement
+  - 20 editorial copy variations
+
+- **Crowd Favorites:** Markets where audience voted decisively (85%+ one way)
+  - Shows crowd conviction percentage
+  - Only displays when real vote data shows strong consensus
+  - 20 editorial copy variations
+
+- **Volume Surge:** Markets with high 24h volume relative to total (>8% ratio)
+  - Shows 24h volume and percentage of total
+  - Only displays when meaningful volume activity detected
+  - 20 editorial copy variations
+
+- **Fading Fast:** Markets with significant negative price changes (>2% drop)
+  - Animated bar showing price decline from old to new value
+  - Red-themed visual treatment
+  - 20 editorial copy variations
+
+- **Most Engaged:** Markets getting the most audience votes
+  - Shows crowd vote vs market price
+  - Only displays when vote data exists
   - 20 editorial copy variations
 
 ### 24H Biggest Movers Sidebar

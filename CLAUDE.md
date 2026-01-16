@@ -187,7 +187,6 @@ Rotating editorial content (10 seconds) with 8 themes, each rotating through mul
 
 ## Development Notes
 
-- **OBS Setup:** Add Browser Source at 1920x1080 pointing to `/broadcast`
 - **QR Codes:** Generated via qrcode.js CDN library
 - **Mock Data:** Falls back to mock NFL markets if API fails
 - **Vote App URL:** `/vote/{market-slug}?t={token}` - slug from URL path, token from query
@@ -201,3 +200,98 @@ Rotating editorial content (10 seconds) with 8 themes, each rotating through mul
 3. Commit and push to GitHub
 4. Deploy with `vercel --prod --yes`
 5. Hard refresh browser to bypass cache (Cmd+Shift+R)
+
+## OBS + YouTube Streaming Setup
+
+### OBS Browser Source Setup
+
+1. Add new **Browser Source**
+2. Configure:
+   - **URL:** `https://nfl-market-pulse.vercel.app/broadcast`
+   - **Width:** `1920`
+   - **Height:** `1080`
+   - **FPS:** `30`
+
+### OBS Output Settings
+
+Go to **Settings → Output**:
+
+| Setting | Value |
+|---------|-------|
+| Output Mode | Simple |
+| Video Bitrate | `6000 Kbps` (recommended for 1080p) |
+| Encoder | Hardware (NVENC/AMD) if available, otherwise x264 |
+| Audio Bitrate | `128 Kbps` (or lower since no audio needed) |
+
+### OBS Video Settings
+
+Go to **Settings → Video**:
+
+| Setting | Value |
+|---------|-------|
+| Base Resolution | `1920x1080` |
+| Output Resolution | `1920x1080` |
+| FPS | `30` |
+
+### OBS Audio Settings (Disable All)
+
+Go to **Settings → Audio** and set all to **Disabled**:
+- Desktop Audio → Disabled
+- Desktop Audio 2 → Disabled
+- Mic/Auxiliary Audio → Disabled
+- Mic/Auxiliary Audio 2 → Disabled
+
+### YouTube Studio Setup
+
+1. Go to `youtube.com/livestreaming`
+2. Select **Streaming Software** mode
+3. Configure stream settings:
+   - **Title:** `🔴 LIVE NFL Odds & Predictions | Super Bowl 2026 Market Tracker`
+   - **Category:** Sports
+   - **Visibility:** Public
+   - **Enable DVR:** On (allows viewers to rewind)
+4. Copy the **Stream Key**
+
+### OBS Stream Settings
+
+Go to **Settings → Stream**:
+
+| Setting | Value |
+|---------|-------|
+| Service | `YouTube - RTMPS` |
+| Server | `Primary YouTube ingest server` |
+| Stream Key | Paste from YouTube Studio |
+
+### Going Live
+
+1. In OBS, click **Start Streaming**
+2. In YouTube Studio, wait for preview to appear
+3. Click **GO LIVE**
+
+### YouTube 12-Hour Limit
+
+YouTube automatically ends streams after 12 hours. For 24/7 streaming:
+- Restart stream manually before 12 hours
+- Or use an auto-restart script with obs-websocket
+- Share `youtube.com/@YourChannel/live` as it always redirects to current stream
+
+### Recommended YouTube Description
+
+```
+🏈 LIVE 24/7 NFL Prediction Market Dashboard
+
+Track real-time Super Bowl LX odds, MVP predictions, and NFL futures powered by Polymarket data.
+
+📊 What you'll see:
+• Live Super Bowl champion odds
+• AFC & NFC Championship probabilities
+• MVP, Rookie of the Year & award markets
+• 24-hour biggest movers
+• Fan sentiment vs market odds
+
+🗳️ VOTE on predictions: https://nfl-market-pulse.vercel.app/vote
+
+🔄 Data refreshes every 60 seconds from Polymarket
+
+#NFL #SuperBowl #NFLPlayoffs #SuperBowlLX #NFLOdds #SportsBetting #Polymarket
+```

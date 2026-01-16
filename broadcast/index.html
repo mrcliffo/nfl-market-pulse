@@ -289,7 +289,6 @@
     /* Editorial Card */
     .editorial-card {
       background: linear-gradient(135deg, var(--card-bg) 0%, rgba(30, 30, 45, 1) 100%);
-      border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 30px 40px;
       margin-top: 15px;
@@ -297,19 +296,42 @@
       gap: 50px;
       align-items: center;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       flex: 1;
       min-height: 180px;
     }
 
+    /* Animated gradient border */
     .editorial-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, var(--orange), var(--blue), #a29bfe, var(--green), var(--orange));
+      background-size: 300% 100%;
+      animation: borderGradientShift 4s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    /* Inner background to mask the gradient */
+    .editorial-card::after {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--orange) 0%, var(--blue) 100%);
+      bottom: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--card-bg) 0%, rgba(30, 30, 45, 1) 100%);
+      z-index: -1;
+    }
+
+    @keyframes borderGradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .editorial-left {
